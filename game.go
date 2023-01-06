@@ -17,4 +17,20 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 package main
 
-type game struct{}
+type game struct {
+	h harvester
+}
+
+func initGame() (g *game) {
+	g = &game{}
+	g.h.xPosition = screenWidth / 2
+	g.h.yPosition = screenHeight - 10
+	g.h.speed = 1
+	g.h.speedLoss = 0.01
+	g.h.maxSpeed = 5
+	g.h.gas = 1000
+	g.h.gasConsumption = 0.1
+	g.h.maxGas = 1000
+	g.h.orientation = -0.3
+	return
+}

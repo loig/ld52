@@ -24,7 +24,7 @@ import (
 
 func main() {
 
-	g := &game{}
+	g := initGame()
 
 	ebiten.SetWindowSize(800, 600)
 	ebiten.SetWindowTitle("ld52")

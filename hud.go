@@ -17,6 +17,10 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 package main
 
-func (g *game) Layout(outsideWidth, outsideHeight int) (int, int) {
-	return screenWidth, screenHeight
+import (
+	"github.com/hajimehoshi/ebiten/v2"
+)
+
+func (g *game) drawHUD(screen *ebiten.Image) {
+	g.h.drawHUD(screen)
 }
