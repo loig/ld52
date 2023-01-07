@@ -20,6 +20,7 @@ package main
 func (g *game) Update() error {
 	g.h.update()
 	g.t.update(g.h.xPosition, g.h.yPosition, g.h.xSpeed, g.h.ySpeed)
-	g.s.update(g.h.collideBox, g.h.ySpeed)
+	gas, nitro, stone := g.s.update(g.h.collideBox, g.h.ySpeed, g.gasRate, g.nitroRate, g.stoneRate)
+	g.h.consume(gas, nitro, stone)
 	return nil
 }

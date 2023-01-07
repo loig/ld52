@@ -18,9 +18,10 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 package main
 
 type game struct {
-	h harvester
-	t trail
-	s collectibleSet
+	h                             harvester
+	t                             trail
+	s                             collectibleSet
+	gasRate, nitroRate, stoneRate int
 }
 
 func initGame() (g *game) {
@@ -30,12 +31,21 @@ func initGame() (g *game) {
 	g.h.yPosition = screenHeight - screenHeight/3
 	g.h.speed = 1
 	g.h.speedLoss = 0.01
+	g.h.stoneSpeedLoss = 2
 	g.h.maxSpeed = 5
 	g.h.gas = 1000
 	g.h.gasConsumption = 0.5
+	g.h.gasProduction = 250
 	g.h.maxGas = 1000
+	g.h.nitroLoss = 1
+	g.h.maxNitro = 250
+	g.h.nitroSpeed = 10
 	g.h.orientation = -1.5
 	g.h.bladeSize = 100
+
+	g.gasRate = 100
+	g.nitroRate = 500
+	g.stoneRate = 100
 
 	return
 }

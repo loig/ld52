@@ -36,10 +36,17 @@ type collectibleSet struct {
 	content []collectible
 }
 
-func (s *collectibleSet) update(harvesterBox box, ySpeedHarvester float64) {
+const (
+	collectibleGas int = iota
+	collectibleNitro
+	collectibleStone
+)
+
+func (s *collectibleSet) update(harvesterBox box, ySpeedHarvester float64, gasRate, nitroRate, stoneRate int) (gas, nitro, stone int) {
 	s.move(ySpeedHarvester)
-	s.collect(harvesterBox)
-	s.generate()
+	gas, nitro, stone = s.collect(harvesterBox)
+	s.generate(gasRate, nitroRate, stoneRate)
+	return
 }
 
 func (s *collectibleSet) move(ySpeedHarvester float64) {
@@ -65,30 +72,76 @@ func (s *collectibleSet) move(ySpeedHarvester float64) {
 	}
 }
 
-func (s *collectibleSet) collect(harvesterBox box) {
+func (s *collectibleSet) collect(harvesterBox box) (gas, nitro, stone int) {
 	for i := 0; i < len(s.content); i++ {
 		if intersectBox(harvesterBox, s.content[i].collideBox) {
+			switch s.content[i].kind {
+			case collectibleGas:
+				gas++
+			case collectibleNitro:
+				nitro++
+			case collectibleStone:
+				stone++
+			}
 			copy(s.content[i:], s.content[i+1:])
 			s.content = s.content[:len(s.content)-1]
 			i--
 		}
 	}
+	return
 }
 
-func (s *collectibleSet) generate() {
-	if rand.Intn(100) == 0 {
+func (s *collectibleSet) generate(gasRate, nitroRate, stoneRate int) {
+	if rand.Intn(gasRate) == 0 {
+		xPos := 10 + rand.Float64()*(screenWidth-10)
 		s.content = append(s.content, collectible{
-			kind: 0,
-			x:    screenWidth / 2, y: 0,
+			kind: collectibleGas,
+			x:    xPos, y: -30,
 			sizeX: 20,
-			sizeY: 50,
+			sizeY: 30,
+		})
+	}
+
+	if rand.Intn(nitroRate) == 0 {
+		xPos := 10 + rand.Float64()*(screenWidth-10)
+		s.content = append(s.content, collectible{
+			kind: collectibleNitro,
+			x:    xPos, y: -30,
+			sizeX: 20,
+			sizeY: 30,
+		})
+	}
+
+	if rand.Intn(stoneRate) == 0 {
+		xPos := 10 + rand.Float64()*(screenWidth-10)
+		s.content = append(s.content, collectible{
+			kind: collectibleStone,
+			x:    xPos, y: -30,
+			sizeX: 20,
+			sizeY: 30,
 		})
 	}
 }
 
 func (s *collectibleSet) draw(screen *ebiten.Image) {
-	for _, c := range s.content {
-		ebitenutil.DrawRect(screen, c.x-c.sizeX/2, c.y-c.sizeY/2, c.sizeX, c.sizeY, color.RGBA{R: 255, A: 255})
+	for i := len(s.content) - 1; i >= 0; i-- {
+		c := s.content[i]
+		col := color.RGBA{A: 255}
+		switch c.kind {
+		case collectibleGas:
+			col.R = 0
+			col.G = 0
+			col.B = 0
+		case collectibleNitro:
+			col.R = 0
+			col.G = 153
+			col.B = 0
+		case collectibleStone:
+			col.R = 96
+			col.G = 96
+			col.B = 96
+		}
+		ebitenutil.DrawRect(screen, c.x-c.sizeX/2, c.y-c.sizeY/2, c.sizeX, c.sizeY, col)
 		c.collideBox.draw(screen)
 	}
 }
