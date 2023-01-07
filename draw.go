@@ -19,17 +19,18 @@ package main
 
 import (
 	"github.com/hajimehoshi/ebiten/v2"
+	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
 	"image/color"
 )
 
 func (g *game) drawLaunch(screen *ebiten.Image) {
-	screen.Fill(color.RGBA{R: 255, G: 255, B: 0, A: 255})
+	ebitenutil.DrawRect(screen, fieldStart, 0, fieldWidth, screenHeight, color.RGBA{R: 255, G: 255, B: 0, A: 255})
 	g.drawHUD(screen)
 	g.h.draw(screen)
 }
 
 func (g *game) drawRun(screen *ebiten.Image) {
-	screen.Fill(color.RGBA{R: 255, G: 255, B: 0, A: 255})
+	ebitenutil.DrawRect(screen, fieldStart, 0, fieldWidth, screenHeight, color.RGBA{R: 255, G: 255, B: 0, A: 255})
 	g.drawHUD(screen)
 	g.t.draw(screen)
 	g.s.draw(screen)

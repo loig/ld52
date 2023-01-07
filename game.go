@@ -57,10 +57,12 @@ func initGame() (g *game) {
 }
 
 func (g *game) reset() {
-	g.h.xPosition = screenWidth / 2
-	g.h.yPosition = screenHeight - screenHeight/3
+	g.h.xPosition = startPositionX
+	g.h.yPosition = startPositionY
 	g.h.orientation = -math.Pi / 2
 	g.h.rotationStep = 0.03
+	g.h.animationStep = 0
+	g.h.animationFrame = 0
 
 	// Speed
 	g.h.maxSpeed = maxSpeed[g.shop.speedLevel]

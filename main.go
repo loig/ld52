@@ -24,9 +24,11 @@ import (
 
 func main() {
 
+	loadAssets()
+
 	g := initGame()
 
-	ebiten.SetWindowSize(800, 600)
+	ebiten.SetWindowSize(360, 640)
 	ebiten.SetWindowTitle("ld52")
 
 	if err := ebiten.RunGame(g); err != nil {

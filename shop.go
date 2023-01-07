@@ -61,7 +61,7 @@ var nitroOnFieldPrice []int = []int{0, 2000, 7000, 15000}
 var nitroEfficiency []float64 = []float64{20, 40, 100}
 var nitroEfficiencyPrice []int = []int{0, 1000, 3000}
 
-var bladeSize []float64 = []float64{50, 100, 200, 500}
+var bladeSize []float64 = []float64{32, 64, 128, 256}
 var bladeSizePrice []int = []int{0, 300, 1500, 5000}
 
 var maxSpeed []float64 = []float64{3, 5, 7, 10}
@@ -82,8 +82,8 @@ func initShop() (s shop) {
 
 	updaterXMargin := 10.0
 	updaterXSize := screenWidth - 2*updaterXMargin
-	updaterYMargin := 80.0
-	updaterYSize := 60.0
+	updaterYMargin := 20.0
+	updaterYSize := 40.0
 	updaterYSpace := 10.0
 
 	xTop := updaterXMargin

@@ -44,7 +44,9 @@ const (
 func (s *collectibleSet) update(harvesterBox box, ySpeedHarvester float64, gasRate, nitroRate, stoneRate int) (gas, nitro, stone int) {
 	s.move(ySpeedHarvester)
 	gas, nitro, stone = s.collect(harvesterBox)
-	s.generate(gasRate, nitroRate, stoneRate)
+	if ySpeedHarvester < 0 {
+		s.generate(gasRate, nitroRate, stoneRate)
+	}
 	return
 }
 
@@ -92,7 +94,7 @@ func (s *collectibleSet) collect(harvesterBox box) (gas, nitro, stone int) {
 func (s *collectibleSet) generate(gasRate, nitroRate, stoneRate int) {
 	if gasRate > 0 {
 		if rand.Intn(gasRate) == 0 {
-			xPos := 10 + rand.Float64()*(screenWidth-10)
+			xPos := fieldStart + rand.Float64()*(fieldWidth)
 			s.content = append(s.content, collectible{
 				kind: collectibleGas,
 				x:    xPos, y: -30,
@@ -104,7 +106,7 @@ func (s *collectibleSet) generate(gasRate, nitroRate, stoneRate int) {
 
 	if nitroRate > 0 {
 		if rand.Intn(nitroRate) == 0 {
-			xPos := 10 + rand.Float64()*(screenWidth-10)
+			xPos := fieldStart + rand.Float64()*(fieldWidth)
 			s.content = append(s.content, collectible{
 				kind: collectibleNitro,
 				x:    xPos, y: -30,
@@ -115,7 +117,7 @@ func (s *collectibleSet) generate(gasRate, nitroRate, stoneRate int) {
 	}
 
 	if rand.Intn(stoneRate) == 0 {
-		xPos := 10 + rand.Float64()*(screenWidth-10)
+		xPos := fieldStart + rand.Float64()*(fieldWidth)
 		s.content = append(s.content, collectible{
 			kind: collectibleStone,
 			x:    xPos, y: -30,

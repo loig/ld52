@@ -22,8 +22,11 @@ import (
 )
 
 const (
-	screenWidth  = 320
-	screenHeight = 960
+	screenWidth  = 270
+	screenHeight = 480
+	fieldWidth   = 200
+	fieldStart   = (screenWidth - fieldWidth) / 2
+	fieldEnd     = fieldStart + fieldWidth
 
 	maxAngle = -math.Pi / 7
 	minAngle = -math.Pi - maxAngle
@@ -31,4 +34,13 @@ const (
 	minSpeed = 0.5
 
 	wheatConversionRate = 1000
+
+	spriteSize = 32
+
+	startPositionX = screenWidth / 2
+	startPositionY = screenHeight - screenHeight/8
+	goalPositionY  = screenHeight / 2
+
+	harvesterAnimationFrames = 10
+	harvesterAnimationSteps  = 2
 )

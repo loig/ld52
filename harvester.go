@@ -45,7 +45,10 @@ type harvester struct {
 	xPosition, yPosition                             float64
 	bladeSize                                        float64
 	xBladeLeft, yBladeLeft, xBladeRight, yBladeRight float64
+	xSprite, ySprite                                 float64
 	collideBox                                       box
+	animationStep                                    int
+	animationFrame                                   int
 }
 
 func (h *harvester) update() {
@@ -54,6 +57,15 @@ func (h *harvester) update() {
 	h.updateNitro()
 	h.updatePosition()
 	h.updateCollideBox()
+	h.updateAnimation()
+}
+
+func (h *harvester) updateAnimation() {
+	h.animationFrame++
+	if h.animationFrame >= harvesterAnimationFrames {
+		h.animationStep = (h.animationStep + 1) % harvesterAnimationSteps
+		h.animationFrame = 0
+	}
 }
 
 func (h *harvester) updateGas() {
@@ -96,9 +108,13 @@ func (h *harvester) updatePosition() {
 	h.ySpeed = math.Sin(h.orientation) * h.actualSpeed
 
 	h.xPosition += h.xSpeed
-	//h.yPosition += h.ySpeed (background should move instead)
-	if (h.xPosition < 0 && h.xSpeed < 0) ||
-		(h.xPosition > screenWidth && h.xSpeed > 0) {
+
+	if h.yPosition > goalPositionY {
+		h.yPosition += h.ySpeed
+		h.ySpeed = 0
+	}
+	if (h.xPosition < fieldStart && h.xSpeed < 0) ||
+		(h.xPosition > fieldEnd && h.xSpeed > 0) {
 		h.orientation = -(math.Pi + h.orientation)
 	}
 }
@@ -118,9 +134,28 @@ func (h *harvester) updateCollideBox() {
 	h.collideBox.p.y = h.yBladeLeft
 	h.collideBox.r.x = h.xBladeRight
 	h.collideBox.r.y = h.yBladeRight
+
+	h.xSprite = spriteSize/2*math.Cos(h.orientation-math.Pi/2) + h.xPosition
+	h.ySprite = spriteSize/2*math.Sin(h.orientation-math.Pi/2) + h.yPosition
 }
 
 func (h *harvester) draw(screen *ebiten.Image) {
+	options := ebiten.DrawImageOptions{}
+	options.GeoM.Rotate(h.orientation + math.Pi/2)
+	options.GeoM.Translate(
+		h.xSprite,
+		h.ySprite,
+	)
+	screen.DrawImage(moissImages[h.animationStep], &options)
+
+	options = ebiten.DrawImageOptions{}
+	options.GeoM.Rotate(h.orientation + math.Pi/2)
+	options.GeoM.Translate(
+		h.xBladeLeft,
+		h.yBladeLeft,
+	)
+	screen.DrawImage(moissLamePetiteImages[h.animationStep], &options)
+
 	ebitenutil.DrawCircle(screen, h.xPosition, h.yPosition, 5, color.RGBA{R: 255, A: 255})
 	ebitenutil.DrawLine(screen, h.xBladeLeft, h.yBladeLeft, h.xBladeRight, h.yBladeRight, color.RGBA{R: 255, A: 255})
 	h.collideBox.draw(screen)
