@@ -29,4 +29,6 @@ const (
 	minAngle = -math.Pi - maxAngle
 
 	minSpeed = 0.5
+
+	wheatConversionRate = 1000
 )

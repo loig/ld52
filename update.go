@@ -67,9 +67,8 @@ func (g *game) updateRun() (done bool) {
 }
 
 func (g *game) updateShop() (done bool) {
-	if inpututil.IsMouseButtonJustPressed(ebiten.MouseButtonLeft) {
-		done = true
-	}
+	spent, done := g.shop.update(g.getWheatForDisplay())
+	g.wheat -= float64(spent) * wheatConversionRate
 	return done
 }
 

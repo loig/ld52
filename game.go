@@ -26,6 +26,7 @@ type game struct {
 	h                             harvester
 	t                             trail
 	s                             collectibleSet
+	shop                          shop
 	gasRate, nitroRate, stoneRate int
 	wheat                         float64
 }
@@ -41,22 +42,16 @@ func initGame() (g *game) {
 	g = &game{}
 
 	g.state = stateLaunch1
-	g.reset()
+
+	g.shop = initShop()
 
 	g.h.speedLoss = 0.01
-	g.h.stoneSpeedLoss = 2
-	g.h.maxSpeed = 5
-	g.h.gas = 1000
+	g.h.speedStep = 0.1
 	g.h.gasConsumption = 2.5
-	g.h.gasProduction = 250
 	g.h.nitroLoss = 1
 	g.h.maxNitro = 250
-	g.h.nitroSpeed = 10
-	g.h.bladeSize = 100
 
-	g.gasRate = 2500
-	g.nitroRate = 10000
-	g.stoneRate = 250
+	g.reset()
 
 	return
 }
@@ -64,18 +59,33 @@ func initGame() (g *game) {
 func (g *game) reset() {
 	g.h.xPosition = screenWidth / 2
 	g.h.yPosition = screenHeight - screenHeight/3
+	g.h.orientation = -math.Pi / 2
+	g.h.rotationStep = 0.03
+
+	// Speed
+	g.h.maxSpeed = maxSpeed[g.shop.speedLevel]
 	g.h.speed = 0
 	g.h.xSpeed = 0
 	g.h.ySpeed = 0
 	g.h.actualSpeed = 0
-	g.h.speedStep = 0.1
-	g.h.gas = 1000
-	g.h.gasConsumption = 0.5
-	g.h.gasProduction = 250
-	g.h.maxGas = 1000
+
+	// Gas
+	g.h.maxGas = gasTank[g.shop.gasTankLevel]
+	g.h.gas = g.h.maxGas
+	g.h.gasProduction = gasEfficiency[g.shop.gasEfficiencyLevel]
+	g.gasRate = gasRate[g.shop.gasOnFieldLevel]
+
+	// Nitro
 	g.h.nitro = 0
-	g.h.orientation = -math.Pi / 2
-	g.h.rotationStep = 0.03
+	g.h.nitroSpeed = nitroEfficiency[g.shop.nitroEfficiencyLevel]
+	g.nitroRate = nitroOnField[g.shop.nitroOnFieldLevel]
+
+	// Stone
+	g.h.stoneSpeedLoss = stoneLoss[g.shop.stoneProtectionLevel]
+	g.stoneRate = stoneOnField[g.shop.stoneOnFieldLevel]
+
+	// Blade
+	g.h.bladeSize = bladeSize[g.shop.bladeLevel]
 
 	g.t.parts = g.t.parts[0:0]
 
@@ -83,5 +93,5 @@ func (g *game) reset() {
 }
 
 func (g game) getWheatForDisplay() int {
-	return int(g.wheat / 1000)
+	return int(g.wheat / wheatConversionRate)
 }

@@ -21,7 +21,6 @@ import (
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
 	"image/color"
-	"log"
 	"math/rand"
 )
 
@@ -67,7 +66,6 @@ func (s *collectibleSet) move(ySpeedHarvester float64) {
 			copy(s.content[i:], s.content[i+1:])
 			s.content = s.content[:len(s.content)-1]
 			i--
-			log.Print("out")
 		}
 	}
 }
@@ -92,24 +90,28 @@ func (s *collectibleSet) collect(harvesterBox box) (gas, nitro, stone int) {
 }
 
 func (s *collectibleSet) generate(gasRate, nitroRate, stoneRate int) {
-	if rand.Intn(gasRate) == 0 {
-		xPos := 10 + rand.Float64()*(screenWidth-10)
-		s.content = append(s.content, collectible{
-			kind: collectibleGas,
-			x:    xPos, y: -30,
-			sizeX: 20,
-			sizeY: 30,
-		})
+	if gasRate > 0 {
+		if rand.Intn(gasRate) == 0 {
+			xPos := 10 + rand.Float64()*(screenWidth-10)
+			s.content = append(s.content, collectible{
+				kind: collectibleGas,
+				x:    xPos, y: -30,
+				sizeX: 20,
+				sizeY: 30,
+			})
+		}
 	}
 
-	if rand.Intn(nitroRate) == 0 {
-		xPos := 10 + rand.Float64()*(screenWidth-10)
-		s.content = append(s.content, collectible{
-			kind: collectibleNitro,
-			x:    xPos, y: -30,
-			sizeX: 20,
-			sizeY: 30,
-		})
+	if nitroRate > 0 {
+		if rand.Intn(nitroRate) == 0 {
+			xPos := 10 + rand.Float64()*(screenWidth-10)
+			s.content = append(s.content, collectible{
+				kind: collectibleNitro,
+				x:    xPos, y: -30,
+				sizeX: 20,
+				sizeY: 30,
+			})
+		}
 	}
 
 	if rand.Intn(stoneRate) == 0 {

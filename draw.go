@@ -37,7 +37,7 @@ func (g *game) drawRun(screen *ebiten.Image) {
 }
 
 func (g *game) drawShop(screen *ebiten.Image) {
-
+	g.shop.draw(screen, g.getWheatForDisplay())
 }
 
 func (g *game) Draw(screen *ebiten.Image) {
