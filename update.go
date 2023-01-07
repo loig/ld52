@@ -17,8 +17,13 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 package main
 
+func (g *game) updateWheat() {
+	g.wheat += g.h.actualSpeed * g.h.bladeSize
+}
+
 func (g *game) Update() error {
 	g.h.update()
+	g.updateWheat()
 	g.t.update(g.h.xPosition, g.h.yPosition, g.h.xSpeed, g.h.ySpeed)
 	gas, nitro, stone := g.s.update(g.h.collideBox, g.h.ySpeed, g.gasRate, g.nitroRate, g.stoneRate)
 	g.h.consume(gas, nitro, stone)

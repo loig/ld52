@@ -18,9 +18,12 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 package main
 
 import (
+	"fmt"
 	"github.com/hajimehoshi/ebiten/v2"
+	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
 )
 
 func (g *game) drawHUD(screen *ebiten.Image) {
 	g.h.drawHUD(screen)
+	ebitenutil.DebugPrintAt(screen, fmt.Sprint("Wheat: ", g.getWheatForDisplay()), 0, 70)
 }

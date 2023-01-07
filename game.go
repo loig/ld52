@@ -22,6 +22,7 @@ type game struct {
 	t                             trail
 	s                             collectibleSet
 	gasRate, nitroRate, stoneRate int
+	wheat                         float64
 }
 
 func initGame() (g *game) {
@@ -43,9 +44,13 @@ func initGame() (g *game) {
 	g.h.orientation = -1.5
 	g.h.bladeSize = 100
 
-	g.gasRate = 100
-	g.nitroRate = 500
-	g.stoneRate = 100
+	g.gasRate = 2500
+	g.nitroRate = 10000
+	g.stoneRate = 250
 
 	return
+}
+
+func (g game) getWheatForDisplay() int {
+	return int(g.wheat / 1000)
 }
