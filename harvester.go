@@ -25,15 +25,18 @@ import (
 )
 
 type harvester struct {
-	speed                float64
-	speedLoss            float64
-	maxSpeed             float64
-	xSpeed, ySpeed       float64
-	gas                  float64
-	gasConsumption       float64
-	maxGas               float64
-	orientation          float64
-	xPosition, yPosition float64
+	speed                                            float64
+	speedLoss                                        float64
+	maxSpeed                                         float64
+	xSpeed, ySpeed                                   float64
+	gas                                              float64
+	gasConsumption                                   float64
+	maxGas                                           float64
+	orientation                                      float64
+	xPosition, yPosition                             float64
+	bladeSize                                        float64
+	xBladeLeft, yBladeLeft, xBladeRight, yBladeRight float64
+	collideBox                                       box
 }
 
 func (h *harvester) update() {
@@ -74,10 +77,27 @@ func (h *harvester) updatePosition() {
 		(h.xPosition > screenWidth && h.xSpeed > 0) {
 		h.orientation = -(math.Pi + h.orientation)
 	}
+
+	h.collideBox.q.x = h.xBladeLeft
+	h.collideBox.q.y = h.yBladeLeft
+	h.collideBox.s.x = h.xBladeRight
+	h.collideBox.s.y = h.yBladeRight
+
+	h.xBladeLeft = h.bladeSize/2*math.Cos(h.orientation-math.Pi/2) + h.xPosition
+	h.yBladeLeft = h.bladeSize/2*math.Sin(h.orientation-math.Pi/2) + h.yPosition
+	h.xBladeRight = -h.bladeSize/2*math.Cos(h.orientation-math.Pi/2) + h.xPosition
+	h.yBladeRight = -h.bladeSize/2*math.Sin(h.orientation-math.Pi/2) + h.yPosition
+
+	h.collideBox.p.x = h.xBladeLeft
+	h.collideBox.p.y = h.yBladeLeft
+	h.collideBox.r.x = h.xBladeRight
+	h.collideBox.r.y = h.yBladeRight
 }
 
 func (h *harvester) draw(screen *ebiten.Image) {
 	ebitenutil.DrawCircle(screen, h.xPosition, h.yPosition, 5, color.RGBA{R: 255, A: 255})
+	ebitenutil.DrawLine(screen, h.xBladeLeft, h.yBladeLeft, h.xBladeRight, h.yBladeRight, color.RGBA{R: 255, A: 255})
+	h.collideBox.draw(screen)
 }
 
 func (h *harvester) drawHUD(screen *ebiten.Image) {

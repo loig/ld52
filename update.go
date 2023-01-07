@@ -20,5 +20,6 @@ package main
 func (g *game) Update() error {
 	g.h.update()
 	g.t.update(g.h.xPosition, g.h.yPosition, g.h.xSpeed, g.h.ySpeed)
+	g.s.update(g.h.collideBox, g.h.ySpeed)
 	return nil
 }

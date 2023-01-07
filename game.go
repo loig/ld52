@@ -20,6 +20,7 @@ package main
 type game struct {
 	h harvester
 	t trail
+	s collectibleSet
 }
 
 func initGame() (g *game) {
@@ -33,7 +34,8 @@ func initGame() (g *game) {
 	g.h.gas = 1000
 	g.h.gasConsumption = 0.5
 	g.h.maxGas = 1000
-	g.h.orientation = -0.8
+	g.h.orientation = -1.5
+	g.h.bladeSize = 100
 
 	return
 }
