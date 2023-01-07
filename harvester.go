@@ -121,10 +121,14 @@ func (h *harvester) updatePosition() {
 }
 
 func (h *harvester) updateCollideBox() {
-	h.collideBox.q.x = h.xBladeLeft
-	h.collideBox.q.y = h.yBladeLeft
-	h.collideBox.s.x = h.xBladeRight
-	h.collideBox.s.y = h.yBladeRight
+
+	xShift := math.Cos(h.orientation) * -bladeHeight
+	yShift := math.Sin(h.orientation) * -bladeHeight
+
+	h.collideBox.q.x = h.xBladeLeft + xShift
+	h.collideBox.q.y = h.yBladeLeft + yShift
+	h.collideBox.s.x = h.xBladeRight + xShift
+	h.collideBox.s.y = h.yBladeRight + yShift
 
 	h.xBladeLeft = h.bladeSize/2*math.Cos(h.orientation-math.Pi/2) + h.xPosition
 	h.yBladeLeft = h.bladeSize/2*math.Sin(h.orientation-math.Pi/2) + h.yPosition
