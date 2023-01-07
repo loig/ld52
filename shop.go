@@ -23,6 +23,7 @@ import (
 	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
 	"github.com/hajimehoshi/ebiten/v2/inpututil"
 	"image/color"
+	//"log"
 )
 
 type shop struct {
@@ -61,8 +62,8 @@ var nitroOnFieldPrice []int = []int{0, 2000, 7000, 15000}
 var nitroEfficiency []float64 = []float64{20, 40, 100}
 var nitroEfficiencyPrice []int = []int{0, 1000, 3000}
 
-var bladeSize []float64 = []float64{32, 64, 128, 256}
-var bladeSizePrice []int = []int{0, 300, 1500, 5000}
+var bladeSize []float64 = []float64{32, 64, 128}
+var bladeSizePrice []int = []int{0, 10, 30}
 
 var maxSpeed []float64 = []float64{3, 5, 7, 10}
 var maxSpeedPrice []int = []int{0, 150, 250, 500}
@@ -73,7 +74,9 @@ var stoneOnFieldPrice []int = []int{0, 150, 500}
 var stoneLoss []float64 = []float64{7, 5, 3, 1}
 var stoneLossPrice []int = []int{0, 1000, 2000, 5000}
 
-func initShop() (s shop) {
+func initShop() (s *shop) {
+
+	s = &shop{}
 
 	s.xOutTopLeft = screenWidth - 50
 	s.yOutTopLeft = screenHeight - 50
@@ -206,6 +209,17 @@ func (s *shop) update(wheat int) (spent int, done bool) {
 				if len(su.price) > *(su.level)+1 && wheat >= su.price[*(su.level)+1] {
 					spent = su.price[*(su.level)+1]
 					*(su.level)++
+					/*log.Print(
+						"gasTankLevel: ", s.gasTankLevel,
+						"\ngasOnFieldLevel: ", s.gasOnFieldLevel,
+						"\ngasEfficiencyLevel: ", s.gasEfficiencyLevel,
+						"\nnitroOnFieldLevel: ", s.nitroOnFieldLevel,
+						"\nnitroEfficiencyLevel: ", s.nitroEfficiencyLevel,
+						"\nbladeLevel: ", s.bladeLevel,
+						"\nspeedLevel: ", s.speedLevel,
+						"\nstoneOnFieldLevel: ", s.stoneOnFieldLevel,
+						"\nstoneProtectionLevel: ", s.stoneProtectionLevel,
+					)*/
 				}
 				break
 			}

@@ -40,7 +40,19 @@ var mlp1 []byte
 //go:embed assets/moissonneuse-lame-petite2.png
 var mlp2 []byte
 
-var moissLamePetiteImages [2]*ebiten.Image
+//go:embed assets/moissonneuse-lame-moyennea-1.png
+var mlm1 []byte
+
+//go:embed assets/moissonneuse-lame-moyennea-2.png
+var mlm2 []byte
+
+//go:embed assets/moissonneuse-lame-grande1.png
+var mlg1 []byte
+
+//go:embed assets/moissonneuse-lame-grande2.png
+var mlg2 []byte
+
+var moissLameImages [6]*ebiten.Image
 
 func loadAssets() {
 	var err error
@@ -61,11 +73,35 @@ func loadAssets() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	moissLamePetiteImages[0] = ebiten.NewImageFromImage(decoded)
+	moissLameImages[0] = ebiten.NewImageFromImage(decoded)
 
 	decoded, _, err = image.Decode(bytes.NewReader(mlp2))
 	if err != nil {
 		log.Fatal(err)
 	}
-	moissLamePetiteImages[1] = ebiten.NewImageFromImage(decoded)
+	moissLameImages[1] = ebiten.NewImageFromImage(decoded)
+
+	decoded, _, err = image.Decode(bytes.NewReader(mlm1))
+	if err != nil {
+		log.Fatal(err)
+	}
+	moissLameImages[2] = ebiten.NewImageFromImage(decoded)
+
+	decoded, _, err = image.Decode(bytes.NewReader(mlm2))
+	if err != nil {
+		log.Fatal(err)
+	}
+	moissLameImages[3] = ebiten.NewImageFromImage(decoded)
+
+	decoded, _, err = image.Decode(bytes.NewReader(mlg1))
+	if err != nil {
+		log.Fatal(err)
+	}
+	moissLameImages[4] = ebiten.NewImageFromImage(decoded)
+
+	decoded, _, err = image.Decode(bytes.NewReader(mlg2))
+	if err != nil {
+		log.Fatal(err)
+	}
+	moissLameImages[5] = ebiten.NewImageFromImage(decoded)
 }

@@ -44,6 +44,7 @@ type harvester struct {
 	rotationStep                                     float64
 	xPosition, yPosition                             float64
 	bladeSize                                        float64
+	bladeLevel                                       int
 	xBladeLeft, yBladeLeft, xBladeRight, yBladeRight float64
 	xSprite, ySprite                                 float64
 	collideBox                                       box
@@ -154,7 +155,7 @@ func (h *harvester) draw(screen *ebiten.Image) {
 		h.xBladeLeft,
 		h.yBladeLeft,
 	)
-	screen.DrawImage(moissLamePetiteImages[h.animationStep], &options)
+	screen.DrawImage(moissLameImages[h.animationStep+h.bladeLevel*harvesterAnimationSteps], &options)
 
 	ebitenutil.DrawCircle(screen, h.xPosition, h.yPosition, 5, color.RGBA{R: 255, A: 255})
 	ebitenutil.DrawLine(screen, h.xBladeLeft, h.yBladeLeft, h.xBladeRight, h.yBladeRight, color.RGBA{R: 255, A: 255})

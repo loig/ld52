@@ -26,7 +26,7 @@ type game struct {
 	h                             harvester
 	t                             trail
 	s                             collectibleSet
-	shop                          shop
+	shop                          *shop
 	gasRate, nitroRate, stoneRate int
 	wheat                         float64
 }
@@ -88,6 +88,7 @@ func (g *game) reset() {
 
 	// Blade
 	g.h.bladeSize = bladeSize[g.shop.bladeLevel]
+	g.h.bladeLevel = g.shop.bladeLevel
 
 	g.t.parts = g.t.parts[0:0]
 
