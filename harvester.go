@@ -30,6 +30,7 @@ type harvester struct {
 	speedLoss                                        float64
 	stoneSpeedLoss                                   float64
 	maxSpeed                                         float64
+	speedStep                                        float64
 	xSpeed, ySpeed                                   float64
 	gas                                              float64
 	gasConsumption                                   float64
@@ -40,6 +41,7 @@ type harvester struct {
 	maxNitro                                         float64
 	nitroLoss                                        float64
 	orientation                                      float64
+	rotationStep                                     float64
 	xPosition, yPosition                             float64
 	bladeSize                                        float64
 	xBladeLeft, yBladeLeft, xBladeRight, yBladeRight float64
@@ -51,6 +53,7 @@ func (h *harvester) update() {
 	h.updateSpeed()
 	h.updateNitro()
 	h.updatePosition()
+	h.updateCollideBox()
 }
 
 func (h *harvester) updateGas() {
@@ -68,12 +71,12 @@ func (h *harvester) updateSpeed() {
 		} else {
 			h.speed = 0
 		}
-	} else {
+	} /* else {
 		h.speed += h.speedLoss
 		if h.speed > h.maxSpeed {
 			h.speed = h.maxSpeed
 		}
-	}
+	} */
 	h.actualSpeed = h.speed
 }
 
@@ -98,7 +101,9 @@ func (h *harvester) updatePosition() {
 		(h.xPosition > screenWidth && h.xSpeed > 0) {
 		h.orientation = -(math.Pi + h.orientation)
 	}
+}
 
+func (h *harvester) updateCollideBox() {
 	h.collideBox.q.x = h.xBladeLeft
 	h.collideBox.q.y = h.yBladeLeft
 	h.collideBox.s.x = h.xBladeRight

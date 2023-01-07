@@ -22,10 +22,31 @@ import (
 	"image/color"
 )
 
-func (g *game) Draw(screen *ebiten.Image) {
+func (g *game) drawLaunch(screen *ebiten.Image) {
+	screen.Fill(color.RGBA{R: 255, G: 255, B: 0, A: 255})
+	g.drawHUD(screen)
+	g.h.draw(screen)
+}
+
+func (g *game) drawRun(screen *ebiten.Image) {
 	screen.Fill(color.RGBA{R: 255, G: 255, B: 0, A: 255})
 	g.drawHUD(screen)
 	g.t.draw(screen)
 	g.s.draw(screen)
 	g.h.draw(screen)
+}
+
+func (g *game) drawShop(screen *ebiten.Image) {
+
+}
+
+func (g *game) Draw(screen *ebiten.Image) {
+	switch g.state {
+	case stateLaunch1, stateLaunch2:
+		g.drawLaunch(screen)
+	case stateRun:
+		g.drawRun(screen)
+	case stateShop:
+		g.drawShop(screen)
+	}
 }

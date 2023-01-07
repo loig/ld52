@@ -17,7 +17,12 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 package main
 
+import (
+	"math"
+)
+
 type game struct {
+	state                         int
 	h                             harvester
 	t                             trail
 	s                             collectibleSet
@@ -25,23 +30,28 @@ type game struct {
 	wheat                         float64
 }
 
+const (
+	stateLaunch1 int = iota
+	stateLaunch2
+	stateRun
+	stateShop
+)
+
 func initGame() (g *game) {
 	g = &game{}
 
-	g.h.xPosition = screenWidth / 2
-	g.h.yPosition = screenHeight - screenHeight/3
-	g.h.speed = 1
+	g.state = stateLaunch1
+	g.reset()
+
 	g.h.speedLoss = 0.01
 	g.h.stoneSpeedLoss = 2
 	g.h.maxSpeed = 5
 	g.h.gas = 1000
-	g.h.gasConsumption = 0.5
+	g.h.gasConsumption = 2.5
 	g.h.gasProduction = 250
-	g.h.maxGas = 1000
 	g.h.nitroLoss = 1
 	g.h.maxNitro = 250
 	g.h.nitroSpeed = 10
-	g.h.orientation = -1.5
 	g.h.bladeSize = 100
 
 	g.gasRate = 2500
@@ -49,6 +59,27 @@ func initGame() (g *game) {
 	g.stoneRate = 250
 
 	return
+}
+
+func (g *game) reset() {
+	g.h.xPosition = screenWidth / 2
+	g.h.yPosition = screenHeight - screenHeight/3
+	g.h.speed = 0
+	g.h.xSpeed = 0
+	g.h.ySpeed = 0
+	g.h.actualSpeed = 0
+	g.h.speedStep = 0.1
+	g.h.gas = 1000
+	g.h.gasConsumption = 0.5
+	g.h.gasProduction = 250
+	g.h.maxGas = 1000
+	g.h.nitro = 0
+	g.h.orientation = -math.Pi / 2
+	g.h.rotationStep = 0.03
+
+	g.t.parts = g.t.parts[0:0]
+
+	g.s.content = g.s.content[0:0]
 }
 
 func (g game) getWheatForDisplay() int {

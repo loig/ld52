@@ -21,6 +21,7 @@ import (
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
 	"image/color"
+	"log"
 )
 
 type trailPart struct {
@@ -30,6 +31,11 @@ type trailPart struct {
 type trail struct {
 	parts      []trailPart
 	goingRight bool
+}
+
+func (t *trail) setup(xHarvester, yHarvester float64) {
+	t.parts = append(t.parts, trailPart{x: xHarvester, y: yHarvester})
+	t.parts = append(t.parts, trailPart{x: xHarvester, y: yHarvester})
 }
 
 func (t *trail) update(xHarvester, yHarvester, xSpeedHarvester, ySpeedHarvester float64) {
@@ -42,12 +48,14 @@ func (t *trail) update(xHarvester, yHarvester, xSpeedHarvester, ySpeedHarvester 
 	if len(t.parts) > 2 && t.parts[len(t.parts)-2].y > screenHeight {
 		t.parts = t.parts[:len(t.parts)-1]
 	}
-	if directionChanged || len(t.parts) <= 0 {
+	if directionChanged {
 		t.parts = append(t.parts, trailPart{})
 		copy(t.parts[1:], t.parts[:len(t.parts)-1])
 	}
 	t.parts[0].x = xHarvester
 	t.parts[0].y = yHarvester
+	t.goingRight = xSpeedHarvester >= 0
+	log.Print(len(t.parts))
 }
 
 func (t *trail) draw(screen *ebiten.Image) {

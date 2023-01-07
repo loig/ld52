@@ -17,7 +17,16 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 package main
 
+import (
+	"math"
+)
+
 const (
 	screenWidth  = 320
 	screenHeight = 960
+
+	maxAngle = -math.Pi / 7
+	minAngle = -math.Pi - maxAngle
+
+	minSpeed = 0.5
 )

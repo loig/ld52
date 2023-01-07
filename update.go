@@ -17,15 +17,82 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 package main
 
+import (
+	"github.com/hajimehoshi/ebiten/v2"
+	"github.com/hajimehoshi/ebiten/v2/inpututil"
+)
+
 func (g *game) updateWheat() {
 	g.wheat += g.h.actualSpeed * g.h.bladeSize
 }
 
-func (g *game) Update() error {
+func (g *game) updateLaunch1() (done bool) {
+	g.h.updateCollideBox()
+	if inpututil.IsMouseButtonJustPressed(ebiten.MouseButtonLeft) {
+		done = true
+	} else {
+		g.h.orientation += g.h.rotationStep
+		if g.h.orientation >= maxAngle {
+			g.h.orientation = maxAngle
+			g.h.rotationStep = -g.h.rotationStep
+		} else if g.h.orientation <= minAngle {
+			g.h.orientation = minAngle
+			g.h.rotationStep = -g.h.rotationStep
+		}
+	}
+	return done
+}
+
+func (g *game) updateLaunch2() (done bool) {
+	if inpututil.IsMouseButtonJustPressed(ebiten.MouseButtonLeft) {
+		done = true
+	} else {
+		g.h.speed += g.h.speedStep
+		if g.h.speed > g.h.maxSpeed {
+			g.h.speed = minSpeed
+		}
+	}
+	g.h.actualSpeed = g.h.speed
+	return done
+}
+
+func (g *game) updateRun() (done bool) {
 	g.h.update()
 	g.updateWheat()
 	g.t.update(g.h.xPosition, g.h.yPosition, g.h.xSpeed, g.h.ySpeed)
 	gas, nitro, stone := g.s.update(g.h.collideBox, g.h.ySpeed, g.gasRate, g.nitroRate, g.stoneRate)
 	g.h.consume(gas, nitro, stone)
+	done = g.h.speed <= 0
+	return done
+}
+
+func (g *game) updateShop() (done bool) {
+	if inpututil.IsMouseButtonJustPressed(ebiten.MouseButtonLeft) {
+		done = true
+	}
+	return done
+}
+
+func (g *game) Update() error {
+	switch g.state {
+	case stateLaunch1:
+		if g.updateLaunch1() {
+			g.state++
+		}
+	case stateLaunch2:
+		if g.updateLaunch2() {
+			g.state++
+			g.t.setup(g.h.xPosition, g.h.yPosition)
+		}
+	case stateRun:
+		if g.updateRun() {
+			g.state++
+		}
+	case stateShop:
+		if g.updateShop() {
+			g.state = stateLaunch1
+			g.reset()
+		}
+	}
 	return nil
 }
