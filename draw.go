@@ -25,5 +25,6 @@ import (
 func (g *game) Draw(screen *ebiten.Image) {
 	screen.Fill(color.RGBA{R: 255, G: 255, B: 0, A: 255})
 	g.drawHUD(screen)
+	g.t.draw(screen)
 	g.h.draw(screen)
 }

@@ -69,7 +69,7 @@ func (h *harvester) updateSpeed() {
 
 func (h *harvester) updatePosition() {
 	h.xPosition += h.xSpeed
-	h.yPosition += h.ySpeed
+	//h.yPosition += h.ySpeed (background should move instead)
 	if (h.xPosition < 0 && h.xSpeed < 0) ||
 		(h.xPosition > screenWidth && h.xSpeed > 0) {
 		h.orientation = -(math.Pi + h.orientation)

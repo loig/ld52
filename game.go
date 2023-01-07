@@ -19,18 +19,21 @@ package main
 
 type game struct {
 	h harvester
+	t trail
 }
 
 func initGame() (g *game) {
 	g = &game{}
+
 	g.h.xPosition = screenWidth / 2
-	g.h.yPosition = screenHeight - 10
+	g.h.yPosition = screenHeight - screenHeight/3
 	g.h.speed = 1
 	g.h.speedLoss = 0.01
 	g.h.maxSpeed = 5
 	g.h.gas = 1000
-	g.h.gasConsumption = 0.1
+	g.h.gasConsumption = 0.5
 	g.h.maxGas = 1000
-	g.h.orientation = -0.3
+	g.h.orientation = -0.8
+
 	return
 }
