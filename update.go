@@ -78,7 +78,7 @@ func (g *game) updateRun() (done bool) {
 	}
 	g.updateWheat()
 	g.t.update(g.h.xPosition, g.h.yPosition, g.h.xSpeed, g.h.ySpeed, g.h.xBladeLeft, g.h.xBladeRight, g.h.yBladeLeft, g.h.yBladeRight)
-	gas, nitro, stone := g.s.update(g.h.collideBox, g.h.ySpeed, g.gasRate, g.nitroRate, g.stoneRate, &(g.ps))
+	gas, nitro, stone := g.s.update(g.h.collideBox, g.h.ySpeed, g.gasRate, g.nitroRate, g.stoneRate, &(g.ps), g.reached)
 	g.h.consume(gas, nitro, stone)
 	g.updateField()
 	done = g.h.actualSpeed <= 0 || g.reached >= goalDistance

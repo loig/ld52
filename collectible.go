@@ -41,11 +41,11 @@ const (
 	collectibleStone
 )
 
-func (s *collectibleSet) update(harvesterBox box, ySpeedHarvester float64, gasRate, nitroRate, stoneRate int, ps *particleSys) (gas, nitro, stone int) {
+func (s *collectibleSet) update(harvesterBox box, ySpeedHarvester float64, gasRate, nitroRate, stoneRate int, ps *particleSys, reached float64) (gas, nitro, stone int) {
 	s.move(ySpeedHarvester)
 	gas, nitro, stone = s.collect(harvesterBox, ps)
 	if ySpeedHarvester < 0 {
-		s.generate(gasRate, nitroRate, stoneRate)
+		s.generate(gasRate, nitroRate, stoneRate, reached)
 	}
 	return
 }
@@ -94,7 +94,7 @@ func (s *collectibleSet) collect(harvesterBox box, ps *particleSys) (gas, nitro,
 	return
 }
 
-func (s *collectibleSet) generate(gasRate, nitroRate, stoneRate int) {
+func (s *collectibleSet) generate(gasRate, nitroRate, stoneRate int, reached float64) {
 
 	if nitroRate > 0 {
 		if rand.Intn(nitroRate) == 0 {
@@ -122,7 +122,7 @@ func (s *collectibleSet) generate(gasRate, nitroRate, stoneRate int) {
 		}
 	}
 
-	if rand.Intn(stoneRate) == 0 {
+	if rand.Intn(stoneRate) == 0 && reached > stonePoint {
 		xPos := fieldStart + rand.Float64()*(fieldWidth)
 		s.content = append(s.content, collectible{
 			kind: collectibleStone,
