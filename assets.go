@@ -94,6 +94,88 @@ var gasTankImages [4]*ebiten.Image
 var digitsBytes []byte
 var digitsImage *ebiten.Image
 
+//go:embed assets/stone.png
+var stoneBytes []byte
+var stoneImage *ebiten.Image
+
+//go:embed assets/gascollect.png
+var gasCollectBytes []byte
+var gasCollectImage *ebiten.Image
+
+//go:embed assets/nitro.png
+var nitroBytes []byte
+var nitroImage *ebiten.Image
+
+//go:embed assets/speed.png
+var speedLogoBytes []byte
+var speedLogoImage *ebiten.Image
+
+//go:embed assets/speedjaugecontenu.png
+var speedValueBytes []byte
+var speedValueImage *ebiten.Image
+
+//go:embed assets/wheatbg.png
+var wbgBytes []byte
+var wbgImage *ebiten.Image
+
+//go:embed assets/fondbouton.png
+var bgbuttonBytes []byte
+var bgbuttonImage *ebiten.Image
+
+var blackbgImage *ebiten.Image
+
+//go:embed assets/buttongastank.png
+var butgtBytes []byte
+var butgtImage *ebiten.Image
+
+//go:embed assets/buttongascollect.png
+var butgcBytes []byte
+var butgcImage *ebiten.Image
+
+//go:embed assets/buttongaseff.png
+var butgeBytes []byte
+var butgeImage *ebiten.Image
+
+//go:embed assets/buttonnitrocollect.png
+var butncBytes []byte
+var butncImage *ebiten.Image
+
+//go:embed assets/buttonnitroeff.png
+var butneBytes []byte
+var butneImage *ebiten.Image
+
+//go:embed assets/buttonbladeeff.png
+var butbeBytes []byte
+var butbeImage *ebiten.Image
+
+//go:embed assets/buttonspeed.png
+var butseBytes []byte
+var butseImage *ebiten.Image
+
+//go:embed assets/buttonstonecollect.png
+var butstcBytes []byte
+var butstcImage *ebiten.Image
+
+//go:embed assets/buttonstoneeff.png
+var butsteBytes []byte
+var butsteImage *ebiten.Image
+
+//go:embed assets/shoplevel.png
+var slevBytes []byte
+var slevImage *ebiten.Image
+
+//go:embed assets/shoplevelok.png
+var slevOkBytes []byte
+var slevOKImage *ebiten.Image
+
+//go:embed assets/buttonout.png
+var boutBytes []byte
+var boutImage *ebiten.Image
+
+//go:embed assets/jaugebg.png
+var tankbgBytes []byte
+var tankbgImage *ebiten.Image
+
 func loadAssets() {
 	var err error
 
@@ -203,4 +285,128 @@ func loadAssets() {
 		log.Fatal(err)
 	}
 	digitsImage = ebiten.NewImageFromImage(decoded)
+
+	decoded, _, err = image.Decode(bytes.NewReader(stoneBytes))
+	if err != nil {
+		log.Fatal(err)
+	}
+	stoneImage = ebiten.NewImageFromImage(decoded)
+
+	decoded, _, err = image.Decode(bytes.NewReader(gasCollectBytes))
+	if err != nil {
+		log.Fatal(err)
+	}
+	gasCollectImage = ebiten.NewImageFromImage(decoded)
+
+	decoded, _, err = image.Decode(bytes.NewReader(nitroBytes))
+	if err != nil {
+		log.Fatal(err)
+	}
+	nitroImage = ebiten.NewImageFromImage(decoded)
+
+	decoded, _, err = image.Decode(bytes.NewReader(speedLogoBytes))
+	if err != nil {
+		log.Fatal(err)
+	}
+	speedLogoImage = ebiten.NewImageFromImage(decoded)
+
+	decoded, _, err = image.Decode(bytes.NewReader(speedValueBytes))
+	if err != nil {
+		log.Fatal(err)
+	}
+	speedValueImage = ebiten.NewImageFromImage(decoded)
+
+	decoded, _, err = image.Decode(bytes.NewReader(wbgBytes))
+	if err != nil {
+		log.Fatal(err)
+	}
+	wbgImage = ebiten.NewImageFromImage(decoded)
+
+	decoded, _, err = image.Decode(bytes.NewReader(bgbuttonBytes))
+	if err != nil {
+		log.Fatal(err)
+	}
+	bgbuttonImage = ebiten.NewImageFromImage(decoded)
+
+	blackbgImage = ebiten.NewImage(screenWidth, screenHeight)
+	blackbgImage.Fill(color.RGBA{A: 255})
+
+	decoded, _, err = image.Decode(bytes.NewReader(butgtBytes))
+	if err != nil {
+		log.Fatal(err)
+	}
+	butgtImage = ebiten.NewImageFromImage(decoded)
+
+	decoded, _, err = image.Decode(bytes.NewReader(butgcBytes))
+	if err != nil {
+		log.Fatal(err)
+	}
+	butgcImage = ebiten.NewImageFromImage(decoded)
+
+	decoded, _, err = image.Decode(bytes.NewReader(butgeBytes))
+	if err != nil {
+		log.Fatal(err)
+	}
+	butgeImage = ebiten.NewImageFromImage(decoded)
+
+	decoded, _, err = image.Decode(bytes.NewReader(butncBytes))
+	if err != nil {
+		log.Fatal(err)
+	}
+	butncImage = ebiten.NewImageFromImage(decoded)
+
+	decoded, _, err = image.Decode(bytes.NewReader(butneBytes))
+	if err != nil {
+		log.Fatal(err)
+	}
+	butneImage = ebiten.NewImageFromImage(decoded)
+
+	decoded, _, err = image.Decode(bytes.NewReader(butbeBytes))
+	if err != nil {
+		log.Fatal(err)
+	}
+	butbeImage = ebiten.NewImageFromImage(decoded)
+
+	decoded, _, err = image.Decode(bytes.NewReader(butseBytes))
+	if err != nil {
+		log.Fatal(err)
+	}
+	butseImage = ebiten.NewImageFromImage(decoded)
+
+	decoded, _, err = image.Decode(bytes.NewReader(butstcBytes))
+	if err != nil {
+		log.Fatal(err)
+	}
+	butstcImage = ebiten.NewImageFromImage(decoded)
+
+	decoded, _, err = image.Decode(bytes.NewReader(butsteBytes))
+	if err != nil {
+		log.Fatal(err)
+	}
+	butsteImage = ebiten.NewImageFromImage(decoded)
+
+	decoded, _, err = image.Decode(bytes.NewReader(slevBytes))
+	if err != nil {
+		log.Fatal(err)
+	}
+	slevImage = ebiten.NewImageFromImage(decoded)
+
+	decoded, _, err = image.Decode(bytes.NewReader(slevOkBytes))
+	if err != nil {
+		log.Fatal(err)
+	}
+	slevOKImage = ebiten.NewImageFromImage(decoded)
+
+	decoded, _, err = image.Decode(bytes.NewReader(boutBytes))
+	if err != nil {
+		log.Fatal(err)
+	}
+	boutImage = ebiten.NewImageFromImage(decoded)
+
+	decoded, _, err = image.Decode(bytes.NewReader(tankbgBytes))
+	if err != nil {
+		log.Fatal(err)
+	}
+	tankbgImage = ebiten.NewImageFromImage(decoded)
+
 }

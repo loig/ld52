@@ -70,7 +70,7 @@ func (g *game) updateRun() (done bool) {
 	gas, nitro, stone := g.s.update(g.h.collideBox, g.h.ySpeed, g.gasRate, g.nitroRate, g.stoneRate)
 	g.h.consume(gas, nitro, stone)
 	g.updateField()
-	done = g.h.speed <= 0
+	done = g.h.actualSpeed <= 0
 	return done
 }
 

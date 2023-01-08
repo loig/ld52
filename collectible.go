@@ -19,8 +19,8 @@ package main
 
 import (
 	"github.com/hajimehoshi/ebiten/v2"
-	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
-	"image/color"
+	//"github.com/hajimehoshi/ebiten/v2/ebitenutil"
+	//"image/color"
 	"math/rand"
 )
 
@@ -92,27 +92,30 @@ func (s *collectibleSet) collect(harvesterBox box) (gas, nitro, stone int) {
 }
 
 func (s *collectibleSet) generate(gasRate, nitroRate, stoneRate int) {
-	if gasRate > 0 {
-		if rand.Intn(gasRate) == 0 {
-			xPos := fieldStart + rand.Float64()*(fieldWidth)
-			s.content = append(s.content, collectible{
-				kind: collectibleGas,
-				x:    xPos, y: -30,
-				sizeX: 20,
-				sizeY: 30,
-			})
-		}
-	}
 
 	if nitroRate > 0 {
 		if rand.Intn(nitroRate) == 0 {
 			xPos := fieldStart + rand.Float64()*(fieldWidth)
 			s.content = append(s.content, collectible{
 				kind: collectibleNitro,
-				x:    xPos, y: -30,
-				sizeX: 20,
-				sizeY: 30,
+				x:    xPos, y: -8,
+				sizeX: 16,
+				sizeY: 16,
 			})
+			return
+		}
+	}
+
+	if gasRate > 0 {
+		if rand.Intn(gasRate) == 0 {
+			xPos := fieldStart + rand.Float64()*(fieldWidth)
+			s.content = append(s.content, collectible{
+				kind: collectibleGas,
+				x:    xPos, y: -8,
+				sizeX: 16,
+				sizeY: 16,
+			})
+			return
 		}
 	}
 
@@ -120,9 +123,9 @@ func (s *collectibleSet) generate(gasRate, nitroRate, stoneRate int) {
 		xPos := fieldStart + rand.Float64()*(fieldWidth)
 		s.content = append(s.content, collectible{
 			kind: collectibleStone,
-			x:    xPos, y: -30,
-			sizeX: 20,
-			sizeY: 30,
+			x:    xPos, y: -8,
+			sizeX: 16,
+			sizeY: 16,
 		})
 	}
 }
@@ -130,22 +133,18 @@ func (s *collectibleSet) generate(gasRate, nitroRate, stoneRate int) {
 func (s *collectibleSet) draw(screen *ebiten.Image) {
 	for i := len(s.content) - 1; i >= 0; i-- {
 		c := s.content[i]
-		col := color.RGBA{A: 255}
+		img := stoneImage
 		switch c.kind {
 		case collectibleGas:
-			col.R = 0
-			col.G = 0
-			col.B = 0
+			img = gasCollectImage
 		case collectibleNitro:
-			col.R = 0
-			col.G = 153
-			col.B = 0
-		case collectibleStone:
-			col.R = 96
-			col.G = 96
-			col.B = 96
+			img = nitroImage
 		}
-		ebitenutil.DrawRect(screen, c.x-c.sizeX/2, c.y-c.sizeY/2, c.sizeX, c.sizeY, col)
+		//ebitenutil.DrawRect(screen, c.x-c.sizeX/2, c.y-c.sizeY/2, c.sizeX, c.sizeY, col)
+
+		op := &ebiten.DrawImageOptions{}
+		op.GeoM.Translate(c.x-c.sizeX/2, c.y-c.sizeY/2)
+		screen.DrawImage(img, op)
 		c.collideBox.draw(screen)
 	}
 }

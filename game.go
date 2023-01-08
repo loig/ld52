@@ -36,7 +36,9 @@ const (
 	stateLaunch1 int = iota
 	stateLaunch2
 	stateRun
+	stateTransToShop
 	stateShop
+	stateTransFromShop
 )
 
 func initGame() (g *game) {

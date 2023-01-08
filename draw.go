@@ -63,13 +63,21 @@ func (g *game) drawField(screen *ebiten.Image, drawTrail bool) {
 func (g *game) drawRun(screen *ebiten.Image) {
 	//ebitenutil.DrawRect(screen, fieldStart, 0, fieldWidth, screenHeight, color.RGBA{R: 255, G: 255, B: 0, A: 255})
 	g.drawField(screen, true)
-	g.drawHUD(screen)
 	g.t.draw(screen)
 	g.s.draw(screen)
 	g.h.draw(screen)
+	g.drawHUD(screen)
 }
 
 func (g *game) drawShop(screen *ebiten.Image) {
+	g.drawField(screen, true)
+	g.s.draw(screen)
+	g.h.draw(screen)
+	op := &ebiten.DrawImageOptions{}
+	op.ColorM.Scale(1, 1, 1, 0.3)
+	screen.DrawImage(blackbgImage, op)
+
+	g.drawWheatHUD(screen)
 	g.shop.draw(screen, g.getWheatForDisplay())
 }
 

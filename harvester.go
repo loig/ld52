@@ -19,9 +19,9 @@ package main
 
 import (
 	"github.com/hajimehoshi/ebiten/v2"
-	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
+	//"github.com/hajimehoshi/ebiten/v2/ebitenutil"
 	"image"
-	"image/color"
+	//"image/color"
 	"math"
 )
 
@@ -71,10 +71,12 @@ func (h *harvester) updateAnimation() {
 }
 
 func (h *harvester) updateGas() {
-	if h.gas > 0 {
-		h.gas -= h.gasConsumption
-	} else {
-		h.gas = 0
+	if h.nitro <= 0 {
+		if h.gas > 0 {
+			h.gas -= h.gasConsumption
+		} else {
+			h.gas = 0
+		}
 	}
 }
 
@@ -169,17 +171,34 @@ func (h *harvester) draw(screen *ebiten.Image) {
 }
 
 func (h *harvester) drawHUD(screen *ebiten.Image) {
-	ebitenutil.DrawRect(screen, 0, 10, h.gas/h.maxGas*100, 10, color.RGBA{B: 255, A: 255})
-	ebitenutil.DrawRect(screen, 0, 30, h.actualSpeed/h.maxSpeed*100, 10, color.RGBA{G: 255, A: 255})
+	//ebitenutil.DrawRect(screen, 0, 10, h.gas/h.maxGas*100, 10, color.RGBA{B: 255, A: 255})
+	//ebitenutil.DrawRect(screen, 0, 30, h.actualSpeed/h.maxSpeed*100, 10, color.RGBA{G: 255, A: 255})
 
+	margin := 10.0
+
+	// gas tank
 	// Logo
 	op := &ebiten.DrawImageOptions{}
-	op.GeoM.Translate(screenWidth-spriteSize-10, screenHeight-spriteSize-10)
+	op.GeoM.Translate(screenWidth-spriteSize-margin, screenHeight-spriteSize-margin)
 	screen.DrawImage(gasLogoImage, op)
 
 	tankDivider := 500.0
 
+	// bg
+	op.GeoM.Translate(0, -spriteSize)
+	screen.DrawImage(tankbgImage, op)
+
+	for i := 0.0; i < (h.maxGas/tankDivider)-2; i++ {
+		op.GeoM.Translate(0, -spriteSize)
+		screen.DrawImage(tankbgImage, op)
+	}
+
+	op.GeoM.Translate(0, -spriteSize)
+	screen.DrawImage(tankbgImage, op)
+
 	// Content
+	op = &ebiten.DrawImageOptions{}
+	op.GeoM.Translate(screenWidth-spriteSize-margin, screenHeight-spriteSize-margin)
 	gasHeight := h.gas / tankDivider * spriteSize
 	gasDrawn := 0.0
 	for gasDrawn+spriteSize <= gasHeight {
@@ -193,11 +212,59 @@ func (h *harvester) drawHUD(screen *ebiten.Image) {
 
 	// Container
 	op = &ebiten.DrawImageOptions{}
-	op.GeoM.Translate(screenWidth-spriteSize-10, screenHeight-spriteSize-10)
+	op.GeoM.Translate(screenWidth-spriteSize-margin, screenHeight-spriteSize-margin)
 	op.GeoM.Translate(0, -spriteSize)
 	screen.DrawImage(gasTankImages[0], op)
 
 	for i := 0.0; i < (h.maxGas/tankDivider)-2; i++ {
+		op.GeoM.Translate(0, -spriteSize)
+		screen.DrawImage(gasTankImages[1], op)
+	}
+
+	op.GeoM.Translate(0, -spriteSize)
+	screen.DrawImage(gasTankImages[2], op)
+
+	// speed display
+	// logo
+	op = &ebiten.DrawImageOptions{}
+	op.GeoM.Translate(margin, screenHeight-spriteSize-margin)
+	screen.DrawImage(speedLogoImage, op)
+
+	speedDivider := (maxSpeed[len(maxSpeed)-1] * tankDivider) / gasTank[len(gasTank)-1]
+
+	// bg
+	op.GeoM.Translate(0, -spriteSize)
+	screen.DrawImage(tankbgImage, op)
+
+	for i := 0.0; i < (h.maxGas/tankDivider)-2; i++ {
+		op.GeoM.Translate(0, -spriteSize)
+		screen.DrawImage(tankbgImage, op)
+	}
+
+	op.GeoM.Translate(0, -spriteSize)
+	screen.DrawImage(tankbgImage, op)
+
+	// Content
+	op = &ebiten.DrawImageOptions{}
+	op.GeoM.Translate(margin, screenHeight-spriteSize-margin)
+	speedHeight := h.speed / speedDivider * spriteSize
+	speedDrawn := 0.0
+	for speedDrawn+spriteSize <= speedHeight {
+		op.GeoM.Translate(0, -spriteSize)
+		screen.DrawImage(speedValueImage, op)
+		speedDrawn += spriteSize
+	}
+	remaining = int(speedHeight - speedDrawn)
+	op.GeoM.Translate(0, -float64(remaining))
+	screen.DrawImage(speedValueImage.SubImage(image.Rect(0, 0, spriteSize, remaining)).(*ebiten.Image), op)
+
+	// Container
+	op = &ebiten.DrawImageOptions{}
+	op.GeoM.Translate(margin, screenHeight-spriteSize-margin)
+	op.GeoM.Translate(0, -spriteSize)
+	screen.DrawImage(gasTankImages[0], op)
+
+	for i := 0.0; i < (h.maxSpeed/speedDivider)-2; i++ {
 		op.GeoM.Translate(0, -spriteSize)
 		screen.DrawImage(gasTankImages[1], op)
 	}
