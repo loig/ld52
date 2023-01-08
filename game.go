@@ -29,6 +29,7 @@ type game struct {
 	shop                          *shop
 	gasRate, nitroRate, stoneRate int
 	wheat                         float64
+	fieldShift                    float64
 }
 
 const (
@@ -57,6 +58,8 @@ func initGame() (g *game) {
 }
 
 func (g *game) reset() {
+	g.fieldShift = 0
+
 	g.h.xPosition = startPositionX
 	g.h.yPosition = startPositionY
 	g.h.orientation = -math.Pi / 2

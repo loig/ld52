@@ -19,18 +19,50 @@ package main
 
 import (
 	"github.com/hajimehoshi/ebiten/v2"
-	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
-	"image/color"
+	//"github.com/hajimehoshi/ebiten/v2/ebitenutil"
+	//"image/color"
 )
 
 func (g *game) drawLaunch(screen *ebiten.Image) {
-	ebitenutil.DrawRect(screen, fieldStart, 0, fieldWidth, screenHeight, color.RGBA{R: 255, G: 255, B: 0, A: 255})
+	g.drawField(screen, false)
 	g.drawHUD(screen)
 	g.h.draw(screen)
 }
 
+func (g *game) drawField(screen *ebiten.Image, drawTrail bool) {
+
+	shift := g.fieldShift
+	op := &ebiten.DrawImageOptions{}
+	op.GeoM.Translate(0, -fieldTileSize)
+	op.GeoM.Translate(0, shift)
+
+	for filled := shift; filled <= screenHeight+fieldTileSize; filled += fieldTileSize {
+		fgImage.DrawImage(fieldImage, op)
+		op.GeoM.Translate(0, fieldTileSize)
+	}
+
+	shift = g.fieldShift
+	op = &ebiten.DrawImageOptions{}
+	op.GeoM.Translate(0, -fieldTileSize)
+	op.GeoM.Translate(0, shift)
+
+	for filled := shift; filled <= screenHeight+fieldTileSize; filled += fieldTileSize {
+		bgImage.DrawImage(groundImage, op)
+		op.GeoM.Translate(0, fieldTileSize)
+	}
+
+	if drawTrail {
+		g.t.applyOnImage(bgImage, fgImage)
+	}
+	op = &ebiten.DrawImageOptions{}
+
+	screen.DrawImage(fgImage, op)
+
+}
+
 func (g *game) drawRun(screen *ebiten.Image) {
-	ebitenutil.DrawRect(screen, fieldStart, 0, fieldWidth, screenHeight, color.RGBA{R: 255, G: 255, B: 0, A: 255})
+	//ebitenutil.DrawRect(screen, fieldStart, 0, fieldWidth, screenHeight, color.RGBA{R: 255, G: 255, B: 0, A: 255})
+	g.drawField(screen, true)
 	g.drawHUD(screen)
 	g.t.draw(screen)
 	g.s.draw(screen)

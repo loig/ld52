@@ -35,8 +35,10 @@ const (
 
 	wheatConversionRate = 1000
 
-	spriteSize  = 32
-	bladeHeight = 10.0
+	spriteSize    = 32
+	bladeHeight   = 10.0
+	fieldTileSize = 32
+	digitTileSize = 24
 
 	startPositionX = screenWidth / 2
 	startPositionY = screenHeight - screenHeight/8

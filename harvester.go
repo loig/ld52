@@ -20,6 +20,7 @@ package main
 import (
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
+	"image"
 	"image/color"
 	"math"
 )
@@ -117,6 +118,7 @@ func (h *harvester) updatePosition() {
 	if (h.xPosition < fieldStart && h.xSpeed < 0) ||
 		(h.xPosition > fieldEnd && h.xSpeed > 0) {
 		h.orientation = -(math.Pi + h.orientation)
+		h.xSpeed = -h.xSpeed
 	}
 }
 
@@ -161,14 +163,48 @@ func (h *harvester) draw(screen *ebiten.Image) {
 	)
 	screen.DrawImage(moissLameImages[h.animationStep+h.bladeLevel*harvesterAnimationSteps], &options)
 
-	ebitenutil.DrawCircle(screen, h.xPosition, h.yPosition, 5, color.RGBA{R: 255, A: 255})
-	ebitenutil.DrawLine(screen, h.xBladeLeft, h.yBladeLeft, h.xBladeRight, h.yBladeRight, color.RGBA{R: 255, A: 255})
-	h.collideBox.draw(screen)
+	//ebitenutil.DrawCircle(screen, h.xPosition, h.yPosition, 5, color.RGBA{R: 255, A: 255})
+	//ebitenutil.DrawLine(screen, h.xBladeLeft, h.yBladeLeft, h.xBladeRight, h.yBladeRight, color.RGBA{R: 255, A: 255})
+	//h.collideBox.draw(screen)
 }
 
 func (h *harvester) drawHUD(screen *ebiten.Image) {
 	ebitenutil.DrawRect(screen, 0, 10, h.gas/h.maxGas*100, 10, color.RGBA{B: 255, A: 255})
 	ebitenutil.DrawRect(screen, 0, 30, h.actualSpeed/h.maxSpeed*100, 10, color.RGBA{G: 255, A: 255})
+
+	// Logo
+	op := &ebiten.DrawImageOptions{}
+	op.GeoM.Translate(screenWidth-spriteSize-10, screenHeight-spriteSize-10)
+	screen.DrawImage(gasLogoImage, op)
+
+	tankDivider := 500.0
+
+	// Content
+	gasHeight := h.gas / tankDivider * spriteSize
+	gasDrawn := 0.0
+	for gasDrawn+spriteSize <= gasHeight {
+		op.GeoM.Translate(0, -spriteSize)
+		screen.DrawImage(gasTankImages[3], op)
+		gasDrawn += spriteSize
+	}
+	remaining := int(gasHeight - gasDrawn)
+	op.GeoM.Translate(0, -float64(remaining))
+	screen.DrawImage(gasTankImages[3].SubImage(image.Rect(0, 0, spriteSize, remaining)).(*ebiten.Image), op)
+
+	// Container
+	op = &ebiten.DrawImageOptions{}
+	op.GeoM.Translate(screenWidth-spriteSize-10, screenHeight-spriteSize-10)
+	op.GeoM.Translate(0, -spriteSize)
+	screen.DrawImage(gasTankImages[0], op)
+
+	for i := 0.0; i < (h.maxGas/tankDivider)-2; i++ {
+		op.GeoM.Translate(0, -spriteSize)
+		screen.DrawImage(gasTankImages[1], op)
+	}
+
+	op.GeoM.Translate(0, -spriteSize)
+	screen.DrawImage(gasTankImages[2], op)
+
 }
 
 func (h *harvester) consume(gas, nitro, stone int) {

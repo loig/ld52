@@ -25,5 +25,16 @@ import (
 
 func (g *game) drawHUD(screen *ebiten.Image) {
 	g.h.drawHUD(screen)
+	g.drawWheatHUD(screen)
+}
+
+func (g *game) drawWheatHUD(screen *ebiten.Image) {
 	ebitenutil.DebugPrintAt(screen, fmt.Sprint("Wheat: ", g.getWheatForDisplay()), 0, 70)
+
+	wheatNumDigits := 1
+	wheatX := float64(screenWidth-(spriteSize+digitTileSize*wheatNumDigits)) / 2
+
+	op := &ebiten.DrawImageOptions{}
+	op.GeoM.Translate(wheatX, 10)
+	screen.DrawImage(wheatLogoImage, op)
 }

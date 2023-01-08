@@ -86,7 +86,7 @@ func initShop() (s *shop) {
 	updaterXMargin := 10.0
 	updaterXSize := screenWidth - 2*updaterXMargin
 	updaterYMargin := 20.0
-	updaterYSize := 40.0
+	updaterYSize := 30.0
 	updaterYSpace := 10.0
 
 	xTop := updaterXMargin
@@ -138,18 +138,16 @@ func initShop() (s *shop) {
 	yTop = yBottom + updaterYSpace
 	yBottom = yTop + updaterYSize
 
-	if s.nitroOnFieldLevel > 0 {
-		s.updaters = append(s.updaters, shopUpdater{
-			xTopLeft: xTop, yTopLeft: yTop,
-			xBottomRight: xBottom, yBottomRight: yBottom,
-			level: &(s.nitroEfficiencyLevel),
-			price: nitroEfficiencyPrice,
-			name:  "Nitro Efficiency",
-		})
+	s.updaters = append(s.updaters, shopUpdater{
+		xTopLeft: xTop, yTopLeft: yTop,
+		xBottomRight: xBottom, yBottomRight: yBottom,
+		level: &(s.nitroEfficiencyLevel),
+		price: nitroEfficiencyPrice,
+		name:  "Nitro Efficiency",
+	})
 
-		yTop = yBottom + updaterYSpace
-		yBottom = yTop + updaterYSize
-	}
+	yTop = yBottom + updaterYSpace
+	yBottom = yTop + updaterYSize
 
 	s.updaters = append(s.updaters, shopUpdater{
 		xTopLeft: xTop, yTopLeft: yTop,

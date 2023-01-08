@@ -56,12 +56,20 @@ func (g *game) updateLaunch2() (done bool) {
 	return done
 }
 
+func (g *game) updateField() {
+	g.fieldShift -= g.h.ySpeed
+	for g.fieldShift > fieldTileSize {
+		g.fieldShift -= fieldTileSize
+	}
+}
+
 func (g *game) updateRun() (done bool) {
 	g.h.update()
 	g.updateWheat()
-	g.t.update(g.h.xPosition, g.h.yPosition, g.h.xSpeed, g.h.ySpeed)
+	g.t.update(g.h.xPosition, g.h.yPosition, g.h.xSpeed, g.h.ySpeed, g.h.xBladeLeft, g.h.xBladeRight, g.h.yBladeLeft, g.h.yBladeRight)
 	gas, nitro, stone := g.s.update(g.h.collideBox, g.h.ySpeed, g.gasRate, g.nitroRate, g.stoneRate)
 	g.h.consume(gas, nitro, stone)
+	g.updateField()
 	done = g.h.speed <= 0
 	return done
 }
@@ -81,7 +89,7 @@ func (g *game) Update() error {
 	case stateLaunch2:
 		if g.updateLaunch2() {
 			g.state++
-			g.t.setup(g.h.xPosition, g.h.yPosition)
+			g.t.setup(g.h.xPosition, g.h.yPosition, g.h.xBladeLeft, g.h.xBladeRight, g.h.yBladeLeft, g.h.yBladeRight)
 		}
 	case stateRun:
 		if g.updateRun() {

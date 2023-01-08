@@ -22,6 +22,7 @@ import (
 	_ "embed"
 	"github.com/hajimehoshi/ebiten/v2"
 	"image"
+	"image/color"
 	_ "image/png"
 	"log"
 )
@@ -53,6 +54,45 @@ var mlg1 []byte
 var mlg2 []byte
 
 var moissLameImages [6]*ebiten.Image
+
+//go:embed assets/field.png
+var fieldBytes []byte
+
+var fieldImage *ebiten.Image
+
+//go:embed assets/ground.png
+var groundBytes []byte
+
+var groundImage *ebiten.Image
+
+var fgImage *ebiten.Image
+var bgImage *ebiten.Image
+
+//go:embed assets/gas.png
+var gasLogoBytes []byte
+var gasLogoImage *ebiten.Image
+
+//go:embed assets/wheat.png
+var wheatLogoBytes []byte
+var wheatLogoImage *ebiten.Image
+
+//go:embed assets/jaugebas.png
+var gasTankBottomBytes []byte
+
+//go:embed assets/jaugemid.png
+var gasTankMidBytes []byte
+
+//go:embed assets/jaugehaut.png
+var gasTankTopBytes []byte
+
+//go:embed assets/jaugecontenu.png
+var gasTankContentBytes []byte
+
+var gasTankImages [4]*ebiten.Image
+
+//go:embed assets/digits.png
+var digitsBytes []byte
+var digitsImage *ebiten.Image
 
 func loadAssets() {
 	var err error
@@ -104,4 +144,63 @@ func loadAssets() {
 		log.Fatal(err)
 	}
 	moissLameImages[5] = ebiten.NewImageFromImage(decoded)
+
+	decoded, _, err = image.Decode(bytes.NewReader(fieldBytes))
+	if err != nil {
+		log.Fatal(err)
+	}
+	fieldImage = ebiten.NewImageFromImage(decoded)
+
+	fgImage = ebiten.NewImage(screenWidth, screenHeight)
+
+	decoded, _, err = image.Decode(bytes.NewReader(groundBytes))
+	if err != nil {
+		log.Fatal(err)
+	}
+	groundImage = ebiten.NewImageFromImage(decoded)
+
+	bgImage = ebiten.NewImage(screenWidth, screenHeight)
+	bgImage.Fill(color.RGBA{R: 106, G: 35, B: 0, A: 255})
+
+	decoded, _, err = image.Decode(bytes.NewReader(gasLogoBytes))
+	if err != nil {
+		log.Fatal(err)
+	}
+	gasLogoImage = ebiten.NewImageFromImage(decoded)
+
+	decoded, _, err = image.Decode(bytes.NewReader(wheatLogoBytes))
+	if err != nil {
+		log.Fatal(err)
+	}
+	wheatLogoImage = ebiten.NewImageFromImage(decoded)
+
+	decoded, _, err = image.Decode(bytes.NewReader(gasTankBottomBytes))
+	if err != nil {
+		log.Fatal(err)
+	}
+	gasTankImages[0] = ebiten.NewImageFromImage(decoded)
+
+	decoded, _, err = image.Decode(bytes.NewReader(gasTankMidBytes))
+	if err != nil {
+		log.Fatal(err)
+	}
+	gasTankImages[1] = ebiten.NewImageFromImage(decoded)
+
+	decoded, _, err = image.Decode(bytes.NewReader(gasTankTopBytes))
+	if err != nil {
+		log.Fatal(err)
+	}
+	gasTankImages[2] = ebiten.NewImageFromImage(decoded)
+
+	decoded, _, err = image.Decode(bytes.NewReader(gasTankContentBytes))
+	if err != nil {
+		log.Fatal(err)
+	}
+	gasTankImages[3] = ebiten.NewImageFromImage(decoded)
+
+	decoded, _, err = image.Decode(bytes.NewReader(digitsBytes))
+	if err != nil {
+		log.Fatal(err)
+	}
+	digitsImage = ebiten.NewImageFromImage(decoded)
 }

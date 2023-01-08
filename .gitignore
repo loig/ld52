@@ -15,4 +15,5 @@
 # vendor/
 
 ld52
-assets/*
+assets/*.kra
+assets/*~
