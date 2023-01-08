@@ -236,7 +236,7 @@ func (h *harvester) drawHUD(screen *ebiten.Image) {
 	op.GeoM.Translate(0, -spriteSize)
 	screen.DrawImage(tankbgImage, op)
 
-	for i := 0.0; i < (h.maxGas/tankDivider)-2; i++ {
+	for i := 0.0; i < (h.maxSpeed/speedDivider)-2; i++ {
 		op.GeoM.Translate(0, -spriteSize)
 		screen.DrawImage(tankbgImage, op)
 	}

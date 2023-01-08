@@ -188,6 +188,10 @@ var njcImg *ebiten.Image
 var titleBytes []byte
 var titleImg *ebiten.Image
 
+//go:embed assets/fieldempty.png
+var feBytes []byte
+var feImg *ebiten.Image
+
 func loadAssets() {
 	var err error
 
@@ -438,4 +442,10 @@ func loadAssets() {
 		log.Fatal(err)
 	}
 	titleImg = ebiten.NewImageFromImage(decoded)
+
+	decoded, _, err = image.Decode(bytes.NewReader(feBytes))
+	if err != nil {
+		log.Fatal(err)
+	}
+	feImg = ebiten.NewImageFromImage(decoded)
 }

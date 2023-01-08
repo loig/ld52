@@ -43,17 +43,17 @@ func (g *game) drawField(screen *ebiten.Image, drawTrail bool) {
 
 	if g.reached < fieldTileSize {
 		op.GeoM.Translate(0, -fieldTileSize)
-		fgImage.DrawImage(groundImage, op)
+		fgImage.DrawImage(feImg, op)
 	}
 
 	if g.reached < 2*fieldTileSize {
 		op.GeoM.Translate(0, -fieldTileSize)
-		fgImage.DrawImage(groundImage, op)
+		fgImage.DrawImage(feImg, op)
 	}
 
 	if g.reached < 3*fieldTileSize {
 		op.GeoM.Translate(0, -fieldTileSize)
-		fgImage.DrawImage(groundImage, op)
+		fgImage.DrawImage(feImg, op)
 	}
 
 	op = &ebiten.DrawImageOptions{}
@@ -61,7 +61,7 @@ func (g *game) drawField(screen *ebiten.Image, drawTrail bool) {
 
 	for i := 0.0; i <= 9; i++ {
 		if g.reached > goalDistance+shift-i*fieldTileSize {
-			fgImage.DrawImage(groundImage, op)
+			fgImage.DrawImage(feImg, op)
 			op.GeoM.Translate(0, fieldTileSize)
 		}
 	}
@@ -120,6 +120,7 @@ func (g *game) Draw(screen *ebiten.Image) {
 		g.drawRun(screen)
 		g.ps.draw(screen)
 		g.trans.draw(screen)
+		g.drawWheatHUD(screen)
 	case stateTransFromShop:
 		g.drawShop(screen)
 		g.ps.draw(screen)
@@ -132,7 +133,10 @@ func (g *game) Draw(screen *ebiten.Image) {
 		op := &ebiten.DrawImageOptions{}
 		screen.DrawImage(titleImg, op)
 	case stateEnd:
-		g.drawRun(screen)
+		//g.drawRun(screen)
+		g.drawField(screen, true)
+		g.s.draw(screen)
+		g.h.draw(screen)
 		g.ps.draw(screen)
 	}
 

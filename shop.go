@@ -54,31 +54,31 @@ type shopUpdater struct {
 }
 
 var gasTank []float64 = []float64{1000, 2500, 4000} // 1000
-var gasTankPrice []int = []int{0, 1000, 5000}
+var gasTankPrice []int = []int{0, 100, 500}
 
-var gasRate []int = []int{-1, 1000, 500, 200} // -1
-var gasRatePrice []int = []int{0, 500, 1500, 8000}
+var gasRate []int = []int{-1, 500, 250, 100} // -1
+var gasRatePrice []int = []int{0, 150, 500, 4000}
 
 var gasEfficiency []float64 = []float64{250, 500, 1000}
-var gasEfficiencyPrice []int = []int{0, 2000, 7000}
+var gasEfficiencyPrice []int = []int{0, 500, 1000}
 
-var nitroOnField []int = []int{10, 2000, 1000, 200} // -1
-var nitroOnFieldPrice []int = []int{0, 2000, 7000, 15000}
+var nitroOnField []int = []int{-1, 2000, 1000, 200} // -1
+var nitroOnFieldPrice []int = []int{0, 1500, 2000, 3000}
 
-var nitroEfficiency []float64 = []float64{10, 20, 50} // 10
-var nitroEfficiencyPrice []int = []int{0, 1000, 3000}
+var nitroEfficiency []float64 = []float64{10, 20, 40} // 10
+var nitroEfficiencyPrice []int = []int{0, 1000, 5000}
 
 var bladeSize []float64 = []float64{32, 64, 128}
-var bladeSizePrice []int = []int{0, 10, 30}
+var bladeSizePrice []int = []int{0, 30, 500}
 
 var maxSpeed []float64 = []float64{2.5, 5, 10} // 3
-var maxSpeedPrice []int = []int{0, 150, 500}
+var maxSpeedPrice []int = []int{0, 30, 500}
 
 var stoneOnField []int = []int{100, 200, 500} // 100
-var stoneOnFieldPrice []int = []int{0, 150, 500}
+var stoneOnFieldPrice []int = []int{0, 500, 1000}
 
 var stoneLoss []float64 = []float64{7, 5, 1}
-var stoneLossPrice []int = []int{0, 1000, 5000}
+var stoneLossPrice []int = []int{0, 500, 1500}
 
 func initShop() (s *shop) {
 

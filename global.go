@@ -49,6 +49,6 @@ const (
 
 	gasDivider = 500.0
 
-	goalDistance = 10000.0
-	stonePoint   = 3000.0
+	goalDistance = 20000.0
+	stonePoint   = 5000.0
 )
