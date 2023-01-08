@@ -21,6 +21,7 @@ import (
 	"fmt"
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
+	"image"
 )
 
 func (g *game) drawHUD(screen *ebiten.Image) {
@@ -31,10 +32,20 @@ func (g *game) drawHUD(screen *ebiten.Image) {
 func (g *game) drawWheatHUD(screen *ebiten.Image) {
 	ebitenutil.DebugPrintAt(screen, fmt.Sprint("Wheat: ", g.getWheatForDisplay()), 0, 70)
 
-	wheatNumDigits := 1
+	digits := getDigits(g.getWheatForDisplay())
+	if len(digits) == 0 {
+		digits = append(digits, 0)
+	}
+	wheatNumDigits := len(digits)
 	wheatX := float64(screenWidth-(spriteSize+digitTileSize*wheatNumDigits)) / 2
 
 	op := &ebiten.DrawImageOptions{}
 	op.GeoM.Translate(wheatX, 10)
 	screen.DrawImage(wheatLogoImage, op)
+
+	op.GeoM.Translate(spriteSize, 0)
+	for i := len(digits) - 1; i >= 0; i-- {
+		screen.DrawImage(digitsImage.SubImage(image.Rect(digits[i]*digitTileSize, 0, (digits[i]+1)*digitTileSize, spriteSize)).(*ebiten.Image), op)
+		op.GeoM.Translate(digitTileSize, 0)
+	}
 }

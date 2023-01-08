@@ -60,3 +60,11 @@ func (b box) draw(screen *ebiten.Image) {
 	ebitenutil.DrawLine(screen, b.s.x, b.s.y, b.q.x, b.q.y, color.RGBA{B: 255, A: 255})
 	ebitenutil.DrawLine(screen, b.q.x, b.q.y, b.p.x, b.p.y, color.RGBA{B: 255, A: 255})
 }
+
+func getDigits(num int) (digits []int) {
+	for num > 0 {
+		digits = append(digits, num%10)
+		num = num / 10
+	}
+	return
+}
