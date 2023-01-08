@@ -36,9 +36,34 @@ func (g *game) drawField(screen *ebiten.Image, drawTrail bool) {
 	op.GeoM.Translate(0, -fieldTileSize)
 	op.GeoM.Translate(0, shift)
 
-	for filled := shift; filled <= screenHeight+fieldTileSize; filled += fieldTileSize {
+	for filled := shift; filled < screenHeight+fieldTileSize; filled += fieldTileSize {
 		fgImage.DrawImage(fieldImage, op)
 		op.GeoM.Translate(0, fieldTileSize)
+	}
+
+	if g.reached < fieldTileSize {
+		op.GeoM.Translate(0, -fieldTileSize)
+		fgImage.DrawImage(groundImage, op)
+	}
+
+	if g.reached < 2*fieldTileSize {
+		op.GeoM.Translate(0, -fieldTileSize)
+		fgImage.DrawImage(groundImage, op)
+	}
+
+	if g.reached < 3*fieldTileSize {
+		op.GeoM.Translate(0, -fieldTileSize)
+		fgImage.DrawImage(groundImage, op)
+	}
+
+	op = &ebiten.DrawImageOptions{}
+	op.GeoM.Translate(0, -fieldTileSize+shift)
+
+	for i := 0.0; i <= 9; i++ {
+		if g.reached > goalDistance+shift-i*fieldTileSize {
+			fgImage.DrawImage(groundImage, op)
+			op.GeoM.Translate(0, fieldTileSize)
+		}
 	}
 
 	shift = g.fieldShift

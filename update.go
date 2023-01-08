@@ -66,7 +66,7 @@ func (g *game) updateField() {
 
 func (g *game) updateRun() (done bool) {
 	g.h.update()
-	g.reached -= g.h.ySpeed / 10
+	g.reached -= g.h.ySpeed
 	g.ps.genHarvesterParticles(g.h.xBladeLeft, g.h.xBladeRight, g.h.yBladeLeft, g.h.yBladeRight, g.h.bladeSize, g.h.nitro > 0)
 	if g.h.nitro <= 0 {
 		if g.h.gas > 0 {
