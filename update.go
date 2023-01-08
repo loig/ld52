@@ -65,9 +65,10 @@ func (g *game) updateField() {
 
 func (g *game) updateRun() (done bool) {
 	g.h.update()
+	g.ps.genHarvesterParticles(g.h.xBladeLeft, g.h.xBladeRight, g.h.yBladeLeft, g.h.yBladeRight, g.h.bladeSize, g.h.nitro > 0)
 	g.updateWheat()
 	g.t.update(g.h.xPosition, g.h.yPosition, g.h.xSpeed, g.h.ySpeed, g.h.xBladeLeft, g.h.xBladeRight, g.h.yBladeLeft, g.h.yBladeRight)
-	gas, nitro, stone := g.s.update(g.h.collideBox, g.h.ySpeed, g.gasRate, g.nitroRate, g.stoneRate)
+	gas, nitro, stone := g.s.update(g.h.collideBox, g.h.ySpeed, g.gasRate, g.nitroRate, g.stoneRate, &(g.ps))
 	g.h.consume(gas, nitro, stone)
 	g.updateField()
 	done = g.h.actualSpeed <= 0
@@ -81,6 +82,9 @@ func (g *game) updateShop() (done bool) {
 }
 
 func (g *game) Update() error {
+
+	yHarvesterMove := 0.0
+
 	switch g.state {
 	case stateLaunch1:
 		if g.updateLaunch1() {
@@ -94,12 +98,28 @@ func (g *game) Update() error {
 	case stateRun:
 		if g.updateRun() {
 			g.state++
+			g.trans.setToShop()
 		}
+		yHarvesterMove = g.h.ySpeed
 	case stateShop:
 		if g.updateShop() {
-			g.state = stateLaunch1
-			g.reset()
+			g.state++
+			g.trans.setFromShop()
+		}
+	case stateTransToShop, stateTransFromShop, stateTransToLaunch:
+		if g.trans.update() {
+			if g.state == stateTransToShop {
+				g.state = stateShop
+			} else if g.state == stateTransFromShop {
+				g.state = stateTransToLaunch
+				g.trans.setToLaunch()
+				g.reset()
+			} else if g.state == stateTransToLaunch {
+				g.state = stateLaunch1
+			}
 		}
 	}
+
+	g.ps.update(yHarvesterMove)
 	return nil
 }

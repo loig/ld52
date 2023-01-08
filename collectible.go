@@ -41,9 +41,9 @@ const (
 	collectibleStone
 )
 
-func (s *collectibleSet) update(harvesterBox box, ySpeedHarvester float64, gasRate, nitroRate, stoneRate int) (gas, nitro, stone int) {
+func (s *collectibleSet) update(harvesterBox box, ySpeedHarvester float64, gasRate, nitroRate, stoneRate int, ps *particleSys) (gas, nitro, stone int) {
 	s.move(ySpeedHarvester)
-	gas, nitro, stone = s.collect(harvesterBox)
+	gas, nitro, stone = s.collect(harvesterBox, ps)
 	if ySpeedHarvester < 0 {
 		s.generate(gasRate, nitroRate, stoneRate)
 	}
@@ -72,16 +72,19 @@ func (s *collectibleSet) move(ySpeedHarvester float64) {
 	}
 }
 
-func (s *collectibleSet) collect(harvesterBox box) (gas, nitro, stone int) {
+func (s *collectibleSet) collect(harvesterBox box, ps *particleSys) (gas, nitro, stone int) {
 	for i := 0; i < len(s.content); i++ {
 		if intersectBox(harvesterBox, s.content[i].collideBox) {
 			switch s.content[i].kind {
 			case collectibleGas:
 				gas++
+				ps.genCollectParticles(s.content[i].x, s.content[i].y, 0)
 			case collectibleNitro:
 				nitro++
+				ps.genCollectParticles(s.content[i].x, s.content[i].y, 1)
 			case collectibleStone:
 				stone++
+				ps.genCollectParticles(s.content[i].x, s.content[i].y, 2)
 			}
 			copy(s.content[i:], s.content[i+1:])
 			s.content = s.content[:len(s.content)-1]

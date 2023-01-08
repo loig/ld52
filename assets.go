@@ -176,6 +176,10 @@ var boutImage *ebiten.Image
 var tankbgBytes []byte
 var tankbgImage *ebiten.Image
 
+//go:embed assets/particle.png
+var partBytes []byte
+var particuleImg *ebiten.Image
+
 func loadAssets() {
 	var err error
 
@@ -409,4 +413,9 @@ func loadAssets() {
 	}
 	tankbgImage = ebiten.NewImageFromImage(decoded)
 
+	decoded, _, err = image.Decode(bytes.NewReader(partBytes))
+	if err != nil {
+		log.Fatal(err)
+	}
+	particuleImg = ebiten.NewImageFromImage(decoded)
 }

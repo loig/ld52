@@ -25,8 +25,8 @@ import (
 
 func (g *game) drawLaunch(screen *ebiten.Image) {
 	g.drawField(screen, false)
-	g.drawHUD(screen)
 	g.h.draw(screen)
+	g.drawHUD(screen)
 }
 
 func (g *game) drawField(screen *ebiten.Image, drawTrail bool) {
@@ -74,7 +74,7 @@ func (g *game) drawShop(screen *ebiten.Image) {
 	g.s.draw(screen)
 	g.h.draw(screen)
 	op := &ebiten.DrawImageOptions{}
-	op.ColorM.Scale(1, 1, 1, 0.3)
+	op.ColorM.Scale(1, 1, 1, 0.5)
 	screen.DrawImage(blackbgImage, op)
 
 	g.drawWheatHUD(screen)
@@ -85,9 +85,24 @@ func (g *game) Draw(screen *ebiten.Image) {
 	switch g.state {
 	case stateLaunch1, stateLaunch2:
 		g.drawLaunch(screen)
+		g.ps.draw(screen)
 	case stateRun:
 		g.drawRun(screen)
+		g.ps.draw(screen)
 	case stateShop:
 		g.drawShop(screen)
+	case stateTransToShop:
+		g.drawRun(screen)
+		g.ps.draw(screen)
+		g.trans.draw(screen)
+	case stateTransFromShop:
+		g.drawShop(screen)
+		g.ps.draw(screen)
+		g.trans.draw(screen)
+	case stateTransToLaunch:
+		g.drawLaunch(screen)
+		g.ps.draw(screen)
+		g.trans.draw(screen)
 	}
+
 }

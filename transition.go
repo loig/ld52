@@ -16,3 +16,57 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 package main
+
+import (
+	"github.com/hajimehoshi/ebiten/v2"
+)
+
+type transition struct {
+	numFrames    int
+	currentFrame int
+	alphaChange  float64
+	alpha        float64
+	alphaGoal    float64
+}
+
+func (t *transition) setToLaunch() {
+	t.numFrames = 120
+	t.currentFrame = 0
+	t.alpha = 1
+	t.alphaChange = -t.alpha / float64(t.numFrames)
+	t.alphaGoal = 0
+}
+
+func (t *transition) setToShop() {
+	t.numFrames = 120
+	t.currentFrame = 0
+	t.alpha = 0
+	t.alphaGoal = 0.5
+	t.alphaChange = t.alphaGoal / float64(t.numFrames)
+}
+
+func (t *transition) setFromShop() {
+	t.numFrames = 120
+	t.currentFrame = 0
+	t.alphaChange = +0.01
+	t.alpha = 0.5
+	t.alphaGoal = 1
+}
+
+func (t *transition) update() (done bool) {
+	t.currentFrame++
+	done = t.currentFrame >= t.numFrames
+	t.alpha += t.alphaChange
+	if t.alphaChange < 0 && t.alpha < t.alphaGoal {
+		t.alpha = t.alphaGoal
+	} else if t.alphaChange > 0 && t.alpha > t.alphaGoal {
+		t.alpha = t.alphaGoal
+	}
+	return
+}
+
+func (t transition) draw(screen *ebiten.Image) {
+	op := &ebiten.DrawImageOptions{}
+	op.ColorM.Scale(1, 1, 1, t.alpha)
+	screen.DrawImage(blackbgImage, op)
+}

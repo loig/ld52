@@ -30,10 +30,13 @@ type game struct {
 	gasRate, nitroRate, stoneRate int
 	wheat                         float64
 	fieldShift                    float64
+	trans                         transition
+	ps                            particleSys
 }
 
 const (
-	stateLaunch1 int = iota
+	stateTransToLaunch int = iota
+	stateLaunch1
 	stateLaunch2
 	stateRun
 	stateTransToShop
@@ -44,7 +47,8 @@ const (
 func initGame() (g *game) {
 	g = &game{}
 
-	g.state = stateLaunch1
+	g.state = 0
+	g.trans.setToLaunch()
 
 	g.shop = initShop()
 
@@ -98,6 +102,9 @@ func (g *game) reset() {
 	g.t.parts = g.t.parts[0:0]
 
 	g.s.content = g.s.content[0:0]
+
+	g.h.updateCollideBox()
+	g.ps.lastAlive = -1
 }
 
 func (g game) getWheatForDisplay() int {
