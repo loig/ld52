@@ -19,8 +19,8 @@ package main
 
 import (
 	"github.com/hajimehoshi/ebiten/v2"
-	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
-	"image/color"
+	//"github.com/hajimehoshi/ebiten/v2/ebitenutil"
+	//"image/color"
 )
 
 type point struct {
@@ -55,10 +55,10 @@ func intersectBox(b1, b2 box) bool {
 }
 
 func (b box) draw(screen *ebiten.Image) {
-	ebitenutil.DrawLine(screen, b.p.x, b.p.y, b.r.x, b.r.y, color.RGBA{B: 255, A: 255})
-	ebitenutil.DrawLine(screen, b.r.x, b.r.y, b.s.x, b.s.y, color.RGBA{B: 255, A: 255})
-	ebitenutil.DrawLine(screen, b.s.x, b.s.y, b.q.x, b.q.y, color.RGBA{B: 255, A: 255})
-	ebitenutil.DrawLine(screen, b.q.x, b.q.y, b.p.x, b.p.y, color.RGBA{B: 255, A: 255})
+	//ebitenutil.DrawLine(screen, b.p.x, b.p.y, b.r.x, b.r.y, color.RGBA{B: 255, A: 255})
+	//ebitenutil.DrawLine(screen, b.r.x, b.r.y, b.s.x, b.s.y, color.RGBA{B: 255, A: 255})
+	//ebitenutil.DrawLine(screen, b.s.x, b.s.y, b.q.x, b.q.y, color.RGBA{B: 255, A: 255})
+	//ebitenutil.DrawLine(screen, b.q.x, b.q.y, b.p.x, b.p.y, color.RGBA{B: 255, A: 255})
 }
 
 func getDigits(num int) (digits []int) {
