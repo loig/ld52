@@ -32,16 +32,19 @@ type game struct {
 	fieldShift                    float64
 	trans                         transition
 	ps                            particleSys
+	reached                       float64
 }
 
 const (
-	stateTransToLaunch int = iota
+	stateTitle int = iota
+	stateTransToLaunch
 	stateLaunch1
 	stateLaunch2
 	stateRun
 	stateTransToShop
 	stateShop
 	stateTransFromShop
+	stateEnd
 )
 
 func initGame() (g *game) {
@@ -53,7 +56,7 @@ func initGame() (g *game) {
 	g.shop = initShop()
 
 	g.h.speedLoss = 0.01
-	g.h.speedStep = 0.1
+	g.h.speedStep = 0.07
 	g.h.gasConsumption = 2.5
 	g.h.nitroLoss = 1
 	g.h.maxNitro = 250
@@ -65,6 +68,8 @@ func initGame() (g *game) {
 
 func (g *game) reset() {
 	g.fieldShift = 0
+
+	g.reached = 0
 
 	g.h.xPosition = startPositionX
 	g.h.yPosition = startPositionY

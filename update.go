@@ -20,6 +20,7 @@ package main
 import (
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/inpututil"
+	//"log"
 )
 
 func (g *game) updateWheat() {
@@ -65,13 +66,22 @@ func (g *game) updateField() {
 
 func (g *game) updateRun() (done bool) {
 	g.h.update()
+	g.reached -= g.h.ySpeed / 10
 	g.ps.genHarvesterParticles(g.h.xBladeLeft, g.h.xBladeRight, g.h.yBladeLeft, g.h.yBladeRight, g.h.bladeSize, g.h.nitro > 0)
+	if g.h.nitro <= 0 {
+		if g.h.gas > 0 {
+			g.ps.genConsumeParticles(screenWidth-32, screenHeight-spriteSize-10-g.h.gas/gasDivider*spriteSize, 0)
+		} else {
+			speedDivider := (maxSpeed[len(maxSpeed)-1] * gasDivider) / gasTank[len(gasTank)-1]
+			g.ps.genConsumeParticles(20, screenHeight-spriteSize-10-g.h.speed/speedDivider*spriteSize, 1)
+		}
+	}
 	g.updateWheat()
 	g.t.update(g.h.xPosition, g.h.yPosition, g.h.xSpeed, g.h.ySpeed, g.h.xBladeLeft, g.h.xBladeRight, g.h.yBladeLeft, g.h.yBladeRight)
 	gas, nitro, stone := g.s.update(g.h.collideBox, g.h.ySpeed, g.gasRate, g.nitroRate, g.stoneRate, &(g.ps))
 	g.h.consume(gas, nitro, stone)
 	g.updateField()
-	done = g.h.actualSpeed <= 0
+	done = g.h.actualSpeed <= 0 || g.reached >= goalDistance
 	return done
 }
 
@@ -97,6 +107,10 @@ func (g *game) Update() error {
 		}
 	case stateRun:
 		if g.updateRun() {
+			if g.reached >= goalDistance {
+				g.state = stateEnd
+				return nil
+			}
 			g.state++
 			g.trans.setToShop()
 		}
@@ -118,6 +132,12 @@ func (g *game) Update() error {
 				g.state = stateLaunch1
 			}
 		}
+	case stateTitle:
+		if inpututil.IsMouseButtonJustPressed(ebiten.MouseButtonLeft) {
+			g.state++
+		}
+	case stateEnd:
+		g.ps.genVictoryParticles()
 	}
 
 	g.ps.update(yHarvesterMove)

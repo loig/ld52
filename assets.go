@@ -180,6 +180,14 @@ var tankbgImage *ebiten.Image
 var partBytes []byte
 var particuleImg *ebiten.Image
 
+//go:embed assets/nitrojauge.png
+var njcBytes []byte
+var njcImg *ebiten.Image
+
+//go:embed assets/title.png
+var titleBytes []byte
+var titleImg *ebiten.Image
+
 func loadAssets() {
 	var err error
 
@@ -418,4 +426,16 @@ func loadAssets() {
 		log.Fatal(err)
 	}
 	particuleImg = ebiten.NewImageFromImage(decoded)
+
+	decoded, _, err = image.Decode(bytes.NewReader(njcBytes))
+	if err != nil {
+		log.Fatal(err)
+	}
+	njcImg = ebiten.NewImageFromImage(decoded)
+
+	decoded, _, err = image.Decode(bytes.NewReader(titleBytes))
+	if err != nil {
+		log.Fatal(err)
+	}
+	titleImg = ebiten.NewImageFromImage(decoded)
 }

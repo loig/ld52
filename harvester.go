@@ -182,7 +182,7 @@ func (h *harvester) drawHUD(screen *ebiten.Image) {
 	op.GeoM.Translate(screenWidth-spriteSize-margin, screenHeight-spriteSize-margin)
 	screen.DrawImage(gasLogoImage, op)
 
-	tankDivider := 500.0
+	tankDivider := gasDivider
 
 	// bg
 	op.GeoM.Translate(0, -spriteSize)
@@ -248,15 +248,20 @@ func (h *harvester) drawHUD(screen *ebiten.Image) {
 	op = &ebiten.DrawImageOptions{}
 	op.GeoM.Translate(margin, screenHeight-spriteSize-margin)
 	speedHeight := h.speed / speedDivider * spriteSize
+	drawImg := speedValueImage
+	if h.nitro > 0 {
+		speedHeight = 800
+		drawImg = njcImg
+	}
 	speedDrawn := 0.0
 	for speedDrawn+spriteSize <= speedHeight {
 		op.GeoM.Translate(0, -spriteSize)
-		screen.DrawImage(speedValueImage, op)
+		screen.DrawImage(drawImg, op)
 		speedDrawn += spriteSize
 	}
 	remaining = int(speedHeight - speedDrawn)
 	op.GeoM.Translate(0, -float64(remaining))
-	screen.DrawImage(speedValueImage.SubImage(image.Rect(0, 0, spriteSize, remaining)).(*ebiten.Image), op)
+	screen.DrawImage(drawImg.SubImage(image.Rect(0, 0, spriteSize, remaining)).(*ebiten.Image), op)
 
 	// Container
 	op = &ebiten.DrawImageOptions{}
@@ -269,8 +274,10 @@ func (h *harvester) drawHUD(screen *ebiten.Image) {
 		screen.DrawImage(gasTankImages[1], op)
 	}
 
-	op.GeoM.Translate(0, -spriteSize)
-	screen.DrawImage(gasTankImages[2], op)
+	if h.nitro <= 0 {
+		op.GeoM.Translate(0, -spriteSize)
+		screen.DrawImage(gasTankImages[2], op)
+	}
 
 }
 

@@ -153,3 +153,56 @@ func (ps *particleSys) genCollectParticles(x, y float64, kind int) {
 	}
 	//log.Print(len(ps.content), ps.lastAlive, ps)
 }
+
+func (ps *particleSys) genConsumeParticles(x, y float64, kind int) {
+	if rand.Intn(3) == 0 {
+		xx := x + float64(rand.Intn(10))
+		yy := y + float64(rand.Intn(3))
+		rr := 1.0
+		gg := 1.0
+		bb := 0.2
+		if kind == 1 {
+			rr = 0
+			gg = 0.65
+			bb = 0.75
+		}
+		ps.addParticle(
+			particle{
+				x: xx, y: yy,
+				vx: 0, vy: 0,
+				a:  0.6,
+				va: 0.01,
+				r:  rr, g: gg, b: bb,
+				life:           0,
+				lifeTime:       60,
+				moveWithScreen: false},
+		)
+	}
+	//log.Print(len(ps.content), ps.lastAlive, ps)
+}
+
+func (ps *particleSys) genVictoryParticles() {
+
+	if rand.Intn(10) == 0 {
+		num := rand.Intn(50) + 40
+		r := rand.Float64()
+		g := rand.Float64()
+		b := rand.Float64()
+		x := rand.Float64() * screenWidth
+		y := rand.Float64() * screenHeight
+		for i := 0; i < num; i++ {
+			ps.addParticle(
+				particle{
+					x: x, y: y,
+					vx: 2 * (0.5 - rand.Float64()), vy: 2 * (0.5 - rand.Float64()),
+					a:  1,
+					va: 0.01,
+					r:  r, g: g, b: b,
+					life:           0,
+					lifeTime:       120,
+					moveWithScreen: false},
+			)
+		}
+	}
+
+}

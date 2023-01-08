@@ -103,6 +103,12 @@ func (g *game) Draw(screen *ebiten.Image) {
 		g.drawLaunch(screen)
 		g.ps.draw(screen)
 		g.trans.draw(screen)
+	case stateTitle:
+		op := &ebiten.DrawImageOptions{}
+		screen.DrawImage(titleImg, op)
+	case stateEnd:
+		g.drawRun(screen)
+		g.ps.draw(screen)
 	}
 
 }

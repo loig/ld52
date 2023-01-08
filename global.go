@@ -46,4 +46,8 @@ const (
 
 	harvesterAnimationFrames = 10
 	harvesterAnimationSteps  = 2
+
+	gasDivider = 500.0
+
+	goalDistance = 10000.0
 )

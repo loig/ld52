@@ -56,13 +56,13 @@ type shopUpdater struct {
 var gasTank []float64 = []float64{1000, 2500, 4000} // 1000
 var gasTankPrice []int = []int{0, 1000, 5000}
 
-var gasRate []int = []int{10, 1000, 500, 200} // -1
+var gasRate []int = []int{-1, 1000, 500, 200} // -1
 var gasRatePrice []int = []int{0, 500, 1500, 8000}
 
 var gasEfficiency []float64 = []float64{250, 500, 1000}
 var gasEfficiencyPrice []int = []int{0, 2000, 7000}
 
-var nitroOnField []int = []int{-1, 2000, 1000, 200} // -1
+var nitroOnField []int = []int{10, 2000, 1000, 200} // -1
 var nitroOnFieldPrice []int = []int{0, 2000, 7000, 15000}
 
 var nitroEfficiency []float64 = []float64{10, 20, 50} // 10
