@@ -40,6 +40,7 @@ type game struct {
 	infiniteMode                  bool
 	onIButton                     bool
 	onNButton                     bool
+	mouseTutoStep                 int
 }
 
 const (

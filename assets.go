@@ -212,6 +212,14 @@ var normalMImg *ebiten.Image
 var infiniteMBytes []byte
 var infiniteMImg *ebiten.Image
 
+//go:embed assets/souris1.png
+var souris1Bytes []byte
+var souris1Img *ebiten.Image
+
+//go:embed assets/souris2.png
+var souris2Bytes []byte
+var souris2Img *ebiten.Image
+
 func loadAssets() {
 	var err error
 
@@ -498,4 +506,16 @@ func loadAssets() {
 		log.Fatal(err)
 	}
 	infiniteMImg = ebiten.NewImageFromImage(decoded)
+
+	decoded, _, err = image.Decode(bytes.NewReader(souris1Bytes))
+	if err != nil {
+		log.Fatal(err)
+	}
+	souris1Img = ebiten.NewImageFromImage(decoded)
+
+	decoded, _, err = image.Decode(bytes.NewReader(souris2Bytes))
+	if err != nil {
+		log.Fatal(err)
+	}
+	souris2Img = ebiten.NewImageFromImage(decoded)
 }

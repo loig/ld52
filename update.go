@@ -91,7 +91,7 @@ func (g *game) updateRun() (done bool) {
 		g.playSound(soundID)
 	}
 	g.updateField()
-	done = g.h.actualSpeed <= 0 || g.reached >= goalDistance
+	done = g.h.actualSpeed <= 0 || (!g.infiniteMode && g.reached >= goalDistance)
 	return done
 }
 
@@ -111,6 +111,8 @@ func (g *game) updateShop() (done bool) {
 func (g *game) Update() error {
 
 	yHarvesterMove := 0.0
+
+	g.tutoUpdate()
 
 	switch g.state {
 	case stateLaunch1:

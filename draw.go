@@ -56,13 +56,15 @@ func (g *game) drawField(screen *ebiten.Image, drawTrail bool) {
 		fgImage.DrawImage(feImg, op)
 	}
 
-	op = &ebiten.DrawImageOptions{}
-	op.GeoM.Translate(0, -fieldTileSize+shift)
+	if !g.infiniteMode {
+		op = &ebiten.DrawImageOptions{}
+		op.GeoM.Translate(0, -fieldTileSize+shift)
 
-	for i := 0.0; i <= 9; i++ {
-		if g.reached > goalDistance+shift-i*fieldTileSize {
-			fgImage.DrawImage(feImg, op)
-			op.GeoM.Translate(0, fieldTileSize)
+		for i := 0.0; i <= 9; i++ {
+			if g.reached > goalDistance+shift-i*fieldTileSize {
+				fgImage.DrawImage(feImg, op)
+				op.GeoM.Translate(0, fieldTileSize)
+			}
 		}
 	}
 
@@ -111,6 +113,7 @@ func (g *game) Draw(screen *ebiten.Image) {
 	switch g.state {
 	case stateLaunch1, stateLaunch2:
 		g.drawLaunch(screen)
+		g.tutoDraw(screen)
 		g.ps.draw(screen)
 	case stateRun:
 		g.drawRun(screen)
@@ -135,6 +138,7 @@ func (g *game) Draw(screen *ebiten.Image) {
 		op := &ebiten.DrawImageOptions{}
 		screen.DrawImage(titleImg, op)
 		g.drawTitle(screen)
+		g.tutoDraw(screen)
 	case stateEnd:
 		//g.drawRun(screen)
 		g.drawField(screen, true)
@@ -142,6 +146,7 @@ func (g *game) Draw(screen *ebiten.Image) {
 		g.h.draw(screen)
 		g.ps.draw(screen)
 		g.drawRunHUD(screen)
+		g.tutoDraw(screen)
 	case stateTransToTitle:
 		g.drawField(screen, true)
 		g.s.draw(screen)

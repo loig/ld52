@@ -83,7 +83,7 @@ func (h *harvester) updateGas() {
 }
 
 func (h *harvester) updateSpeed() {
-	if h.gas <= 0 {
+	if h.gas <= 0 && h.nitro <= 0 {
 		if h.speed > 0 {
 			h.speed -= h.speedLoss
 		} else {
