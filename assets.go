@@ -204,6 +204,14 @@ var distImg *ebiten.Image
 var maxDistBytes []byte
 var maxDistImg *ebiten.Image
 
+//go:embed assets/buttonnormalmode.png
+var normalMBytes []byte
+var normalMImg *ebiten.Image
+
+//go:embed assets/buttoninfinitemode.png
+var infiniteMBytes []byte
+var infiniteMImg *ebiten.Image
+
 func loadAssets() {
 	var err error
 
@@ -478,4 +486,16 @@ func loadAssets() {
 		log.Fatal(err)
 	}
 	maxDistImg = ebiten.NewImageFromImage(decoded)
+
+	decoded, _, err = image.Decode(bytes.NewReader(normalMBytes))
+	if err != nil {
+		log.Fatal(err)
+	}
+	normalMImg = ebiten.NewImageFromImage(decoded)
+
+	decoded, _, err = image.Decode(bytes.NewReader(infiniteMBytes))
+	if err != nil {
+		log.Fatal(err)
+	}
+	infiniteMImg = ebiten.NewImageFromImage(decoded)
 }

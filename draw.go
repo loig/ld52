@@ -103,6 +103,7 @@ func (g *game) drawShop(screen *ebiten.Image) {
 	screen.DrawImage(blackbgImage, op)
 
 	g.drawWheatHUD(screen)
+	g.drawRunHUD(screen)
 	g.shop.draw(screen, g.getWheatForDisplay())
 }
 
@@ -121,6 +122,7 @@ func (g *game) Draw(screen *ebiten.Image) {
 		g.ps.draw(screen)
 		g.trans.draw(screen)
 		g.drawWheatHUD(screen)
+		g.drawRunHUD(screen)
 	case stateTransFromShop:
 		g.drawShop(screen)
 		g.ps.draw(screen)
@@ -132,17 +134,20 @@ func (g *game) Draw(screen *ebiten.Image) {
 	case stateTitle:
 		op := &ebiten.DrawImageOptions{}
 		screen.DrawImage(titleImg, op)
+		g.drawTitle(screen)
 	case stateEnd:
 		//g.drawRun(screen)
 		g.drawField(screen, true)
 		g.s.draw(screen)
 		g.h.draw(screen)
 		g.ps.draw(screen)
+		g.drawRunHUD(screen)
 	case stateTransToTitle:
 		g.drawField(screen, true)
 		g.s.draw(screen)
 		g.h.draw(screen)
 		g.ps.draw(screen)
+		g.drawRunHUD(screen)
 		g.trans.draw(screen)
 	}
 

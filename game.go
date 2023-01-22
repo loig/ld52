@@ -35,9 +35,11 @@ type game struct {
 	reached                       float64
 	bestReached                   float64
 	audio                         soundManager
-	menuSelection                 int
 	numRun                        int
 	minNumRun                     int
+	infiniteMode                  bool
+	onIButton                     bool
+	onNButton                     bool
 }
 
 const (
@@ -76,8 +78,6 @@ func initGame() (g *game) {
 
 func (g *game) reset() {
 	g.fieldShift = 0
-
-	g.menuSelection = 0
 
 	g.reached = 0
 

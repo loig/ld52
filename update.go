@@ -25,7 +25,7 @@ import (
 
 func (g *game) updateWheat() {
 	g.wheat += g.h.actualSpeed * g.h.bladeSize
-	if g.wheat > 999999 {
+	if g.wheat > 99999000 {
 		g.wheat = 99999000
 	}
 }
@@ -142,7 +142,7 @@ func (g *game) Update() error {
 			g.bestReached = g.reached
 		}
 		if g.updateRun() {
-			if g.reached >= goalDistance {
+			if g.reached >= goalDistance && !g.infiniteMode {
 				g.state = stateEnd
 				g.stopMusic()
 				return nil
@@ -181,9 +181,15 @@ func (g *game) Update() error {
 		}
 	case stateTitle:
 		g.updateMusic(music1ID, 1)
+		x, y := ebiten.CursorPosition()
+		onButton := g.onInfiniteButton(float64(x), float64(y)) || g.onNormalButton(float64(x), float64(y))
 		if inpututil.IsMouseButtonJustPressed(ebiten.MouseButtonLeft) {
-			g.state++
-			g.playSound(soundStartID)
+			if onButton {
+				g.state++
+				g.playSound(soundStartID)
+			} else {
+				g.playSound(soundMissBuyID)
+			}
 		}
 	case stateEnd:
 		if g.ps.genVictoryParticles() {

@@ -28,8 +28,10 @@ func (g *game) drawHUD(screen *ebiten.Image) {
 	g.h.drawHUD(screen)
 	g.drawWheatHUD(screen)
 	g.drawRunHUD(screen)
-	g.drawDistanceHUD(screen, false)
-	g.drawDistanceHUD(screen, true)
+	if g.reached > 0 {
+		g.drawDistanceHUD(screen, false)
+		g.drawDistanceHUD(screen, true)
+	}
 }
 
 func (g *game) drawDistanceHUD(screen *ebiten.Image, record bool) {
