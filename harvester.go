@@ -28,6 +28,7 @@ import (
 type harvester struct {
 	actualSpeed                                      float64
 	speed                                            float64
+	initialSpeed                                     float64
 	speedLoss                                        float64
 	stoneSpeedLoss                                   float64
 	maxSpeed                                         float64
@@ -53,13 +54,14 @@ type harvester struct {
 	animationFrame                                   int
 }
 
-func (h *harvester) update() {
+func (h *harvester) update() (boing bool) {
 	h.updateGas()
 	h.updateSpeed()
 	h.updateNitro()
-	h.updatePosition()
+	boing = h.updatePosition()
 	h.updateCollideBox()
 	h.updateAnimation()
+	return
 }
 
 func (h *harvester) updateAnimation() {
@@ -106,7 +108,7 @@ func (h *harvester) updateNitro() {
 	}
 }
 
-func (h *harvester) updatePosition() {
+func (h *harvester) updatePosition() (boing bool) {
 
 	h.xSpeed = math.Cos(h.orientation) * h.actualSpeed
 	h.ySpeed = math.Sin(h.orientation) * h.actualSpeed
@@ -121,7 +123,9 @@ func (h *harvester) updatePosition() {
 		(h.xPosition > fieldEnd && h.xSpeed > 0) {
 		h.orientation = -(math.Pi + h.orientation)
 		h.xSpeed = -h.xSpeed
+		boing = true
 	}
+	return
 }
 
 func (h *harvester) updateCollideBox() {
@@ -281,14 +285,25 @@ func (h *harvester) drawHUD(screen *ebiten.Image) {
 
 }
 
-func (h *harvester) consume(gas, nitro, stone int) {
+func (h *harvester) consume(gas, nitro, stone int) (sound int) {
+	sound = -1
+
 	h.gas += float64(gas) * h.gasProduction
 	if h.gas > h.maxGas {
 		h.gas = h.maxGas
 	}
 
+	if stone > 0 {
+		sound = soundStoneID
+	}
+
+	if gas > 0 {
+		sound = soundGasID
+	}
+
 	if nitro > 0 {
 		h.nitro = h.maxNitro
+		sound = soundNitroID
 	}
 
 	if h.nitro <= 0 {
@@ -297,4 +312,6 @@ func (h *harvester) consume(gas, nitro, stone int) {
 			h.speed = 0
 		}
 	}
+
+	return
 }

@@ -17,3 +17,8 @@
 ld52
 assets/*.kra
 assets/*~
+web/*
+minia.png
+minia2.png
+screen*.png
+*.bak

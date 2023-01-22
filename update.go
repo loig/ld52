@@ -46,6 +46,7 @@ func (g *game) updateLaunch1() (done bool) {
 
 func (g *game) updateLaunch2() (done bool) {
 	if inpututil.IsMouseButtonJustPressed(ebiten.MouseButtonLeft) {
+		g.h.initialSpeed = g.h.speed
 		done = true
 	} else {
 		g.h.speed += g.h.speedStep
@@ -65,7 +66,10 @@ func (g *game) updateField() {
 }
 
 func (g *game) updateRun() (done bool) {
-	g.h.update()
+	boing := g.h.update()
+	if boing {
+		g.playSound(soundReboundID)
+	}
 	g.reached -= g.h.ySpeed
 	g.ps.genHarvesterParticles(g.h.xBladeLeft, g.h.xBladeRight, g.h.yBladeLeft, g.h.yBladeRight, g.h.bladeSize, g.h.nitro > 0)
 	if g.h.nitro <= 0 {
@@ -79,15 +83,25 @@ func (g *game) updateRun() (done bool) {
 	g.updateWheat()
 	g.t.update(g.h.xPosition, g.h.yPosition, g.h.xSpeed, g.h.ySpeed, g.h.xBladeLeft, g.h.xBladeRight, g.h.yBladeLeft, g.h.yBladeRight)
 	gas, nitro, stone := g.s.update(g.h.collideBox, g.h.ySpeed, g.gasRate, g.nitroRate, g.stoneRate, &(g.ps), g.reached)
-	g.h.consume(gas, nitro, stone)
+	soundID := g.h.consume(gas, nitro, stone)
+	if soundID >= 0 {
+		g.playSound(soundID)
+	}
 	g.updateField()
 	done = g.h.actualSpeed <= 0 || g.reached >= goalDistance
 	return done
 }
 
 func (g *game) updateShop() (done bool) {
-	spent, done := g.shop.update(g.getWheatForDisplay())
-	g.wheat -= float64(spent) * wheatConversionRate
+	spent, done, newButton := g.shop.update(g.getWheatForDisplay())
+	if spent > 0 {
+		g.wheat -= float64(spent) * wheatConversionRate
+		g.playSound(soundBuyID)
+	} else if spent < 0 {
+		g.playSound(soundMissBuyID)
+	} else if newButton {
+		g.playSound(soundMenuButtonID)
+	}
 	return done
 }
 
@@ -97,18 +111,30 @@ func (g *game) Update() error {
 
 	switch g.state {
 	case stateLaunch1:
+		g.updateMusic(music1ID, 0.8)
 		if g.updateLaunch1() {
 			g.state++
 		}
 	case stateLaunch2:
+		g.updateMusic(music1ID, 0.8)
 		if g.updateLaunch2() {
 			g.state++
 			g.t.setup(g.h.xPosition, g.h.yPosition, g.h.xBladeLeft, g.h.xBladeRight, g.h.yBladeLeft, g.h.yBladeRight)
 		}
 	case stateRun:
+		if g.h.nitro > 0 {
+			g.updateMusic(music3ID, 1)
+		} else {
+			volume := 0.0
+			if g.h.initialSpeed != 0 {
+				volume = g.h.speed / g.h.initialSpeed
+			}
+			g.updateMusic(music2ID, volume)
+		}
 		if g.updateRun() {
 			if g.reached >= goalDistance {
 				g.state = stateEnd
+				g.stopMusic()
 				return nil
 			}
 			g.state++
@@ -116,11 +142,16 @@ func (g *game) Update() error {
 		}
 		yHarvesterMove = g.h.ySpeed
 	case stateShop:
+		g.updateMusic(music1ID, 0.8)
 		if g.updateShop() {
 			g.state++
 			g.trans.setFromShop()
+			g.playSound(soundMenuExitID)
 		}
 	case stateTransToShop, stateTransFromShop, stateTransToLaunch:
+		if g.state != stateTransToShop {
+			g.updateMusic(music1ID, 0.8)
+		}
 		if g.trans.update() {
 			if g.state == stateTransToShop {
 				g.state = stateShop
@@ -133,11 +164,15 @@ func (g *game) Update() error {
 			}
 		}
 	case stateTitle:
+		g.updateMusic(music1ID, 1)
 		if inpututil.IsMouseButtonJustPressed(ebiten.MouseButtonLeft) {
 			g.state++
+			g.playSound(soundStartID)
 		}
 	case stateEnd:
-		g.ps.genVictoryParticles()
+		if g.ps.genVictoryParticles() {
+			g.playSound(soundFireworkID)
+		}
 	}
 
 	g.ps.update(yHarvesterMove)

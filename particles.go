@@ -181,9 +181,10 @@ func (ps *particleSys) genConsumeParticles(x, y float64, kind int) {
 	//log.Print(len(ps.content), ps.lastAlive, ps)
 }
 
-func (ps *particleSys) genVictoryParticles() {
+func (ps *particleSys) genVictoryParticles() (playSound bool) {
 
 	if rand.Intn(10) == 0 {
+		playSound = true
 		num := rand.Intn(50) + 40
 		r := rand.Float64()
 		g := rand.Float64()
@@ -204,5 +205,7 @@ func (ps *particleSys) genVictoryParticles() {
 			)
 		}
 	}
+
+	return
 
 }

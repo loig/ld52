@@ -30,6 +30,7 @@ func main() {
 
 	ebiten.SetWindowSize(360, 640)
 	ebiten.SetWindowTitle("ld52")
+	ebiten.SetWindowResizable(true)
 
 	if err := ebiten.RunGame(g); err != nil {
 		log.Fatal(err)

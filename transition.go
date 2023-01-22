@@ -30,7 +30,7 @@ type transition struct {
 }
 
 func (t *transition) setToLaunch() {
-	t.numFrames = 120
+	t.numFrames = 80
 	t.currentFrame = 0
 	t.alpha = 1
 	t.alphaChange = -t.alpha / float64(t.numFrames)
@@ -38,7 +38,7 @@ func (t *transition) setToLaunch() {
 }
 
 func (t *transition) setToShop() {
-	t.numFrames = 120
+	t.numFrames = 40
 	t.currentFrame = 0
 	t.alpha = 0
 	t.alphaGoal = 0.5
@@ -46,7 +46,7 @@ func (t *transition) setToShop() {
 }
 
 func (t *transition) setFromShop() {
-	t.numFrames = 120
+	t.numFrames = 40
 	t.currentFrame = 0
 	t.alphaChange = +0.01
 	t.alpha = 0.5

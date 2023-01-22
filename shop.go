@@ -210,9 +210,10 @@ func initShop() (s *shop) {
 	return
 }
 
-func (s *shop) update(wheat int) (spent int, done bool) {
+func (s *shop) update(wheat int) (spent int, done, newButton bool) {
 
 	x, y := ebiten.CursorPosition()
+	oldDisplayPrice := s.displayPrice
 	s.displayPrice = 0
 
 	for i, su := range s.updaters {
@@ -223,8 +224,14 @@ func (s *shop) update(wheat int) (spent int, done bool) {
 		}
 	}
 
+	newButton = s.displayPrice != oldDisplayPrice && s.displayPrice != 0
+
+	wasOnOut := s.onOut
+
 	s.onOut = float64(x) > s.xOutTopLeft && float64(x) < s.xOutBottomRight &&
 		float64(y) > s.yOutTopLeft && float64(y) < s.yOutBottomRight
+
+	newButton = newButton || (!wasOnOut && s.onOut)
 
 	if inpututil.IsMouseButtonJustReleased(ebiten.MouseButtonLeft) {
 		if s.onOut {
@@ -236,7 +243,9 @@ func (s *shop) update(wheat int) (spent int, done bool) {
 				if len(su.price) > *(su.level)+1 && wheat >= su.price[*(su.level)+1] {
 					spent = su.price[*(su.level)+1]
 					*(su.level)++
+					break
 				}
+				spent = -1
 				break
 			}
 		}

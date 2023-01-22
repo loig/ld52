@@ -33,6 +33,7 @@ type game struct {
 	trans                         transition
 	ps                            particleSys
 	reached                       float64
+	audio                         soundManager
 }
 
 const (
@@ -60,6 +61,8 @@ func initGame() (g *game) {
 	g.h.gasConsumption = 2.5
 	g.h.nitroLoss = 1
 	g.h.maxNitro = 250
+
+	g.initAudio()
 
 	g.reset()
 
