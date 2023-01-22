@@ -192,6 +192,18 @@ var titleImg *ebiten.Image
 var feBytes []byte
 var feImg *ebiten.Image
 
+//go:embed assets/clock.png
+var clockBytes []byte
+var clockImg *ebiten.Image
+
+//go:embed assets/dist.png
+var distBytes []byte
+var distImg *ebiten.Image
+
+//go:embed assets/bestdist.png
+var maxDistBytes []byte
+var maxDistImg *ebiten.Image
+
 func loadAssets() {
 	var err error
 
@@ -448,4 +460,22 @@ func loadAssets() {
 		log.Fatal(err)
 	}
 	feImg = ebiten.NewImageFromImage(decoded)
+
+	decoded, _, err = image.Decode(bytes.NewReader(clockBytes))
+	if err != nil {
+		log.Fatal(err)
+	}
+	clockImg = ebiten.NewImageFromImage(decoded)
+
+	decoded, _, err = image.Decode(bytes.NewReader(distBytes))
+	if err != nil {
+		log.Fatal(err)
+	}
+	distImg = ebiten.NewImageFromImage(decoded)
+
+	decoded, _, err = image.Decode(bytes.NewReader(maxDistBytes))
+	if err != nil {
+		log.Fatal(err)
+	}
+	maxDistImg = ebiten.NewImageFromImage(decoded)
 }

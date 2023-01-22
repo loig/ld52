@@ -25,6 +25,9 @@ import (
 
 func (g *game) updateWheat() {
 	g.wheat += g.h.actualSpeed * g.h.bladeSize
+	if g.wheat > 999999 {
+		g.wheat = 99999000
+	}
 }
 
 func (g *game) updateLaunch1() (done bool) {
@@ -120,6 +123,10 @@ func (g *game) Update() error {
 		if g.updateLaunch2() {
 			g.state++
 			g.t.setup(g.h.xPosition, g.h.yPosition, g.h.xBladeLeft, g.h.xBladeRight, g.h.yBladeLeft, g.h.yBladeRight)
+			g.numRun++
+			if g.numRun > 99 {
+				g.numRun = 99
+			}
 		}
 	case stateRun:
 		if g.h.nitro > 0 {
@@ -130,6 +137,9 @@ func (g *game) Update() error {
 				volume = g.h.speed / g.h.initialSpeed
 			}
 			g.updateMusic(music2ID, volume)
+		}
+		if g.reached > g.bestReached {
+			g.bestReached = g.reached
 		}
 		if g.updateRun() {
 			if g.reached >= goalDistance {
@@ -165,6 +175,7 @@ func (g *game) Update() error {
 				g.shop.reset()
 				g.wheat = 0
 				g.reset()
+				g.numRun = 0
 				g.state = stateTitle
 			}
 		}
@@ -181,6 +192,9 @@ func (g *game) Update() error {
 		if inpututil.IsMouseButtonJustPressed(ebiten.MouseButtonLeft) {
 			g.state = stateTransToTitle
 			g.trans.setToTitle()
+			if g.minNumRun == 0 || g.minNumRun > g.numRun {
+				g.minNumRun = g.numRun
+			}
 		}
 	}
 

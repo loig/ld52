@@ -33,7 +33,11 @@ type game struct {
 	trans                         transition
 	ps                            particleSys
 	reached                       float64
+	bestReached                   float64
 	audio                         soundManager
+	menuSelection                 int
+	numRun                        int
+	minNumRun                     int
 }
 
 const (
@@ -72,6 +76,8 @@ func initGame() (g *game) {
 
 func (g *game) reset() {
 	g.fieldShift = 0
+
+	g.menuSelection = 0
 
 	g.reached = 0
 
