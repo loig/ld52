@@ -46,6 +46,7 @@ const (
 	stateShop
 	stateTransFromShop
 	stateEnd
+	stateTransToTitle
 )
 
 func initGame() (g *game) {

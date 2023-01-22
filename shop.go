@@ -210,6 +210,18 @@ func initShop() (s *shop) {
 	return
 }
 
+func (s *shop) reset() {
+	s.gasTankLevel = 0
+	s.gasOnFieldLevel = 0
+	s.gasEfficiencyLevel = 0
+	s.nitroOnFieldLevel = 0
+	s.nitroEfficiencyLevel = 0
+	s.bladeLevel = 0
+	s.speedLevel = 0
+	s.stoneOnFieldLevel = 0
+	s.stoneProtectionLevel = 0
+}
+
 func (s *shop) update(wheat int) (spent int, done, newButton bool) {
 
 	x, y := ebiten.CursorPosition()

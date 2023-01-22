@@ -138,6 +138,12 @@ func (g *game) Draw(screen *ebiten.Image) {
 		g.s.draw(screen)
 		g.h.draw(screen)
 		g.ps.draw(screen)
+	case stateTransToTitle:
+		g.drawField(screen, true)
+		g.s.draw(screen)
+		g.h.draw(screen)
+		g.ps.draw(screen)
+		g.trans.draw(screen)
 	}
 
 }

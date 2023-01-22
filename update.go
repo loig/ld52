@@ -148,8 +148,8 @@ func (g *game) Update() error {
 			g.trans.setFromShop()
 			g.playSound(soundMenuExitID)
 		}
-	case stateTransToShop, stateTransFromShop, stateTransToLaunch:
-		if g.state != stateTransToShop {
+	case stateTransToShop, stateTransFromShop, stateTransToLaunch, stateTransToTitle:
+		if g.state != stateTransToShop && g.state != stateTransToTitle {
 			g.updateMusic(music1ID, 0.8)
 		}
 		if g.trans.update() {
@@ -161,6 +161,11 @@ func (g *game) Update() error {
 				g.reset()
 			} else if g.state == stateTransToLaunch {
 				g.state = stateLaunch1
+			} else if g.state == stateTransToTitle {
+				g.shop.reset()
+				g.wheat = 0
+				g.reset()
+				g.state = stateTitle
 			}
 		}
 	case stateTitle:
@@ -172,6 +177,10 @@ func (g *game) Update() error {
 	case stateEnd:
 		if g.ps.genVictoryParticles() {
 			g.playSound(soundFireworkID)
+		}
+		if inpututil.IsMouseButtonJustPressed(ebiten.MouseButtonLeft) {
+			g.state = stateTransToTitle
+			g.trans.setToTitle()
 		}
 	}
 

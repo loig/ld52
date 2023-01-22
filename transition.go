@@ -48,9 +48,17 @@ func (t *transition) setToShop() {
 func (t *transition) setFromShop() {
 	t.numFrames = 40
 	t.currentFrame = 0
-	t.alphaChange = +0.01
 	t.alpha = 0.5
 	t.alphaGoal = 1
+	t.alphaChange = (t.alphaGoal-t.alpha)/float64(t.numFrames) + t.alpha
+}
+
+func (t *transition) setToTitle() {
+	t.numFrames = 120
+	t.currentFrame = 0
+	t.alpha = 0
+	t.alphaGoal = 1
+	t.alphaChange = t.alphaGoal / float64(t.numFrames)
 }
 
 func (t *transition) update() (done bool) {
