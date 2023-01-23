@@ -37,12 +37,24 @@ func (g *game) tutoUpdate() {
 }
 
 func (g *game) tutoDraw(screen *ebiten.Image) {
+
+	yshift := yInfiniteModeBottom + 4
+	xshift := float64(screenWidth-32) / 2
+
+	if g.state == stateLaunch1 {
+		yshift += 48
+	}
+
+	if g.state == stateLaunch2 {
+		xshift -= 80
+	}
+
 	img := souris1Img
 	if (g.mouseTutoStep >= mouseTutoB1 && g.mouseTutoStep < mouseTutoB2) ||
 		(g.mouseTutoStep >= mouseTutoB3 && g.mouseTutoStep < mouseTutoB4) {
 		img = souris2Img
 	}
 	op := &ebiten.DrawImageOptions{}
-	op.GeoM.Translate(float64(screenWidth-32)/2, yNormalModeTop-36)
+	op.GeoM.Translate(xshift, yshift)
 	screen.DrawImage(img, op)
 }
